@@ -18,7 +18,8 @@ public class WorldGeneration {
         this.WIDTH = WIDTH;
         this.seed = seed;
         this.tiles = new TETile[LENGTH][WIDTH];
-        RandomWorld();
+        OutsideGeneration();
+        InsideGeneration();
     }
 
 
@@ -32,12 +33,23 @@ public class WorldGeneration {
 
 
     // 生成边界 by 王宇扬
-    private void sideGeneration(){
+    private void OutsideGeneration(){
 
     }
-    // 生成地图 by 张书源
-    private void RandomWorld(){
 
+    // 生成内部 by 张书源
+    private void InsideGeneration(){
+       for(int x = 0; x < this.LENGTH; x ++){
+           for(int y = 0; y < this.WIDTH; y ++){
+               if(tiles[x][y] == null){
+                   if(RandomSeed.nextInt(100) < 50){
+                       tiles[x][y] = Tileset.FLOOR;
+                   }else{
+                       tiles[x][y] = Tileset.WALL;
+                   }
+               }
+           }
+       }
     }
 
 
