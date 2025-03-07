@@ -3,13 +3,16 @@ package core;
 import java.awt.*;
 
 public class Room {
-    int r_x, r_y, r_width, r_height;
+    public int r_x, r_y, r_width, r_height;
+    public Point centerPoint;
 
     public Room(int r_x, int r_y, int r_width, int r_height){
         this.r_width = r_width;
         this.r_height = r_height;
         this.r_x = r_x;
         this.r_y = r_y;
+        // 添加了获取中心点的部分
+        this.centerPoint = get_center();
     }
 
     /*判断房间是否重叠*/
@@ -22,6 +25,6 @@ public class Room {
 
     /*获取房间中心*/
     public Point get_center(){
-        return new Point(r_x + r_width / 2, r_y + r_height / 2);
+        return new Point((int)Math.floor(r_x + r_width / 2.0), (int)Math.floor(r_y + r_height / 2.0));
     }
 }
