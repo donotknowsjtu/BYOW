@@ -14,7 +14,7 @@ public class WorldGeneration {
     // 世界的宽度（y轴）
     private int WIDTH;
     private int seed;
-    private Random RandomSeed = new Random(seed);
+    public Random RandomSeed = new Random(seed);
    // 核心：瓦片构成的数组，长度为LENGTH，宽度为WIDTH
     public TETile[][] tiles;
 
@@ -30,8 +30,7 @@ public class WorldGeneration {
         this.seed = seed;
         this.tiles = new TETile[LENGTH][WIDTH];
         OutsideGeneration();
-//        InsideGeneration();
-//        ensureConnectivity();
+        RoadGeneration();
     }
 
     /** @Test 仅供test使用
@@ -43,8 +42,7 @@ public class WorldGeneration {
             this.LENGTH = LENGTH;
             this.WIDTH = WIDTH;
             OutsideGeneration();
-            //InsideGeneration();
-            //ensureConnectivity();
+            RoadGeneration();
         }
     }
 
@@ -68,75 +66,6 @@ public class WorldGeneration {
         Random rand = new Random();
         RoomGenerate(rand.nextInt(5) + 25);
     }
-
-//    /** 生成内部
-//     * @Author 张书源
-//     */
-//    private void InsideGeneration(){
-//       for(int x = 0; x < this.LENGTH; x ++){
-//           for(int y = 0; y < this.WIDTH; y ++){
-//               if(tiles[x][y] == null){
-//                   if(RandomSeed.nextInt(100) < 50){
-//                       tiles[x][y] = Tileset.FLOOR;
-//                   }else{
-//                       tiles[x][y] = Tileset.WALL;
-//                   }
-//               }
-//           }
-//       }
-//    }
-//
-//    /** 检测内部是否有被wall单独围起来的小区域，如果有将其转化为wall
-//    目的：通过杀死围栏，避免玩家被生成在这种围栏中
-//     @Author 张书源
-//     **/
-//    private void ensureConnectivity() {
-//        boolean[][] visited = new boolean[LENGTH][WIDTH];
-//        int largestRegionSize = 0;
-//        int largestRegionX = -1;
-//        int largestRegionY = -1;
-//
-//        // 找到最大的连通区域
-//        for (int x = 0; x < LENGTH; x++) {
-//            for (int y = 0; y < WIDTH; y++) {
-//                if (tiles[x][y] == Tileset.FLOOR && !visited[x][y]) {
-//                    int regionSize = floodFill(x, y, visited);
-//                    if (regionSize > largestRegionSize) {
-//                        largestRegionSize = regionSize;
-//                        largestRegionX = x;
-//                        largestRegionY = y;
-//                    }
-//                }
-//            }
-//        }
-//
-//        // 将非连通的小区域转换为WALL
-//        for (int x = 0; x < LENGTH; x++) {
-//            for (int y = 0; y < WIDTH; y++) {
-//                if (tiles[x][y] == Tileset.FLOOR && !visited[x][y]) {
-//                    tiles[x][y] = Tileset.WALL;
-//                }
-//            }
-//        }
-//    }
-//    /** @ensureConnectivity() 辅助方法，计算每个连通区域大小
-//        @Author 张书源
-//     **/
-//    private int floodFill(int x, int y, boolean[][] visited) {
-//        if (x < 0 || x >= LENGTH || y < 0 || y >= WIDTH || visited[x][y] || tiles[x][y] != Tileset.FLOOR) {
-//            return 0;
-//        }
-//        visited[x][y] = true;
-//        int size = 1;
-//        size += floodFill(x + 1, y, visited);
-//        size += floodFill(x - 1, y, visited);
-//        size += floodFill(x, y + 1, visited);
-//        size += floodFill(x, y - 1, visited);
-//        return size;
-//    }
-
-
-
     /*随机生成房间*/
     private void RoomGenerate(int RoomNums){
         Random rand = new Random();
@@ -176,6 +105,13 @@ public class WorldGeneration {
     }
 
 
+    /**
+     * @Description 将房间连接起来，生成道路和道路两边的墙壁
+     * @Author 张书源
+     */
+    private void RoadGeneration(){
+        new Road(this).RoadGenerate(RandomSeed);
+    }
 
     public TETile[][] getWorld() {
         return tiles;
