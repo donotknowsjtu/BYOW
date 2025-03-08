@@ -65,19 +65,17 @@ public class WorldGeneration {
      * @Author 王宇扬
      */
     private void OutsideGeneration(){
-        Random rand = new Random();
-        RoomGenerate(rand.nextInt(5) + 25);
+        RoomGenerate(RandomSeed.nextInt(5) + 25);
     }
     /*随机生成房间*/
     private void RoomGenerate(int RoomNums){
-        Random rand = new Random();
         while(rooms.size() < RoomNums)
         {
-            int RoomWidth = rand.nextInt(8) + 4;
-            int RoomHeight = rand.nextInt(8) + 4;
+            int RoomWidth = RandomSeed.nextInt(8) + 4;
+            int RoomHeight = RandomSeed.nextInt(8) + 4;
 
-            int r_x = rand.nextInt(WIDTH - RoomWidth);
-            int r_y = rand.nextInt(LENGTH - RoomHeight);
+            int r_x = RandomSeed.nextInt(WIDTH - RoomWidth);
+            int r_y = RandomSeed.nextInt(LENGTH - RoomHeight);
 
             Room room = new Room(r_x, r_y, RoomWidth, RoomHeight);
 
