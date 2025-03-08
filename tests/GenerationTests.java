@@ -8,6 +8,6 @@ public class GenerationTests {
      * @Assigned 王宇扬 ，等王宇扬完成OutersideGeneration()方法的编写即可对整个WorldGeneration进行测试/
      **/
         public static void main(String args[]){
-            new WorldGeneration(60, 60, 12345).WorldRender();
+            new WorldGeneration(50, 50, 122132).WorldRender();
         }
 }

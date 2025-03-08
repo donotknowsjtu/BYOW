@@ -10,9 +10,9 @@ import java.util.Random;
 
 public class WorldGeneration {
     // 世界的长度（x轴）
-    private int LENGTH;
+    public int LENGTH;
     // 世界的宽度（y轴）
-    private int WIDTH;
+    public int WIDTH;
     private int seed;
     public Random RandomSeed = new Random(seed);
    // 核心：瓦片构成的数组，长度为LENGTH，宽度为WIDTH
@@ -31,6 +31,7 @@ public class WorldGeneration {
         this.tiles = new TETile[LENGTH][WIDTH];
         OutsideGeneration();
         RoadGeneration();
+        padNOTHING();
     }
 
     /** @Test 仅供test使用
@@ -43,6 +44,7 @@ public class WorldGeneration {
             this.WIDTH = WIDTH;
             OutsideGeneration();
             RoadGeneration();
+            padNOTHING();
         }
     }
 
@@ -112,6 +114,23 @@ public class WorldGeneration {
     private void RoadGeneration(){
         new Road(this).RoadGenerate(RandomSeed);
     }
+
+    /**
+     * 填充剩余瓦片为NOTHING
+     * @Author 张书源
+     *
+     */
+
+    public void padNOTHING(){
+        for(int i = 0; i < LENGTH; i ++){
+            for(int j = 0;j < WIDTH; j ++){
+                if(tiles[i][j] == null){
+                    tiles[i][j] = Tileset.NOTHING;
+                }
+            }
+        }
+    }
+
 
     public TETile[][] getWorld() {
         return tiles;
