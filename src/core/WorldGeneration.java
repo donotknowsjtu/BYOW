@@ -17,7 +17,10 @@ public class WorldGeneration {
     public Random RandomSeed = new Random(seed);
    // 核心：瓦片构成的数组，长度为LENGTH，宽度为WIDTH
     public TETile[][] tiles;
+    public static TETile[][] world;
 
+
+    private final TERenderer worldRender = new TERenderer();
 
    // 用于存放生成的房间
     public List<Room> rooms = new ArrayList<>();
@@ -29,6 +32,7 @@ public class WorldGeneration {
         this.WIDTH = WIDTH;
         this.seed = seed;
         this.tiles = new TETile[LENGTH][WIDTH];
+        world = tiles;
         OutsideGeneration();
         RoadGeneration();
         padNOTHING();
@@ -42,6 +46,7 @@ public class WorldGeneration {
             this.seed = seed;
             this.LENGTH = LENGTH;
             this.WIDTH = WIDTH;
+            world = tiles;
             OutsideGeneration();
             RoadGeneration();
             padNOTHING();
@@ -54,8 +59,8 @@ public class WorldGeneration {
      * @Usage 使用方法：需要在生成世界后，即创建WorldGeneration的实例后在需要的地方执行该实例的该方法来手动渲染世界，一般使用在程序的最后，用于手动渲染
      */
     public void WorldRender(){
-        TERenderer worldRender = new TERenderer();
-        worldRender.initialize(this.LENGTH, this.WIDTH);
+
+        //worldRender.initialize(this.LENGTH, this.WIDTH);
         worldRender.renderFrame(this.tiles);
     }
 
@@ -78,7 +83,6 @@ public class WorldGeneration {
             int r_y = RandomSeed.nextInt(LENGTH - RoomHeight);
 
             Room room = new Room(r_x, r_y, RoomWidth, RoomHeight);
-
             boolean is_lap = false;
             for (Room r : rooms){
                 if(room.is_intersect(r)){
@@ -128,6 +132,15 @@ public class WorldGeneration {
             }
         }
     }
+
+
+
+
+    public static boolean isTileWalkable(int x, int y){
+
+        return world[x][y] == Tileset.FLOOR;
+    }
+
 
 
     public TETile[][] getWorld() {
