@@ -25,7 +25,8 @@ public class Game {
 
 
         Point startPoint = wg.rooms.get(0).get_center();
-        player = new Player(startPoint.x + 0.5,startPoint.y + 0.5);
+
+        //player = new Player(startPoint.x + 0.5,startPoint.y + 0.5);
     }
     public void run(){
         while (true){
@@ -40,7 +41,8 @@ public class Game {
 
     private void render(){
         ter.renderFrame(wg.tiles);
-        player.draw();
+        //player.draw();
         StdDraw.show();
     }
 }
+//注释掉的即为更新代码绘制逻辑后，暂且不能用的部分

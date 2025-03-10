@@ -54,15 +54,15 @@ public class WorldGeneration {
     }
 
 
-    /**@Function 渲染世界
-     * @Description 通过调用TERenderer类的方法来生成一个与瓦片数组大小一致的窗口并且将瓦片数组渲染到窗口中
-     * @Usage 使用方法：需要在生成世界后，即创建WorldGeneration的实例后在需要的地方执行该实例的该方法来手动渲染世界，一般使用在程序的最后，用于手动渲染
-     */
-    public void WorldRender(){
-
-        worldRender.initialize(this.LENGTH, this.WIDTH);
-        worldRender.renderFrame(this.tiles);
-    }
+//    /**@Function 渲染世界
+//     * @Description 通过调用TERenderer类的方法来生成一个与瓦片数组大小一致的窗口并且将瓦片数组渲染到窗口中
+//     * @Usage 使用方法：需要在生成世界后，即创建WorldGeneration的实例后在需要的地方执行该实例的该方法来手动渲染世界，一般使用在程序的最后，用于手动渲染
+//     */
+//    public void WorldRender(){
+//
+//        worldRender.initialize(this.LENGTH, this.WIDTH);
+//        worldRender.renderFrame(this.tiles);
+//    }
 
 
     /** 生成边界

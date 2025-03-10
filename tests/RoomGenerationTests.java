@@ -13,7 +13,7 @@ public class RoomGenerationTests {
 
 
             WorldGeneration worldGeneration = new WorldGeneration(testTiles, 1234, 48, 48, true);
-            worldGeneration.WorldRender();
+            //worldGeneration.WorldRender();
         }
 }
 

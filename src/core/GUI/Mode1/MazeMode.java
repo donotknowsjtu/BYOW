@@ -26,6 +26,6 @@ public class MazeMode {
         WorldGeneration world = new WorldGeneration(Length, Width, seed);
         TETile [][] worldTiles = world.getWorld();
 
-        world.WorldRender();
+
     }
 }
