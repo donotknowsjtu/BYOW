@@ -10,6 +10,7 @@ import java.awt.*;
  */
 public class Home {
     private final String Home_page_name = "Home";
+    private JFrame home = new JFrame(Home_page_name);
     /**
      * 构造函数
      * 传递参数：无需传参
@@ -23,10 +24,12 @@ public class Home {
      * 生成home页面
      */
     public void home_generate() {
-        JFrame home = new JFrame(Home_page_name);
+
         home.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         home.setSize(1000, 800);
 
+
+        setLocation();
         // 新建标题label
         JLabel title = new JLabel("BYOW");
         title.setHorizontalAlignment(JLabel.CENTER);
@@ -41,4 +44,23 @@ public class Home {
         home.setVisible(true);
     }
 
+    private void setLocation(){
+        // 设置显示在屏幕中央
+        // 获取屏幕尺寸
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
+        // 获取窗口尺寸
+        Dimension windowSize = home.getSize();
+        int windowWidth = windowSize.width;
+        int windowHeight = windowSize.height;
+
+        // 计算窗口居中位置
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        // 设置窗口位置
+        home.setLocation(x, y);
+    }
 }

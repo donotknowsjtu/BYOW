@@ -11,20 +11,24 @@ import java.awt.event.ActionListener;
 public class MazeModeIndex {
     private JFrame mazeModeIndex;
     private JPanel panel;
-    public String seed;
+    private long seed;
     private JButton newGame;
     private JButton history;
     private JTextField seedText;
     private JTextField LengthText;
     private JTextField WidthText;
     private JButton enter;
-    public int Length;
-    public int Width;
+    private int Length;
+    private int Width;
 
     public MazeModeIndex() {
         mazeModeIndex = new JFrame("迷宫模式首页");
+
         mazeModeIndex.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mazeModeIndex.setSize(1000, 800);
+
+        // 设置屏幕显示位置
+        setLocation();
 
         panel = new JPanel(new GridLayout(5, 1));
         newGame = new JButton("new game");
@@ -41,6 +45,7 @@ public class MazeModeIndex {
             @Override
             public void actionPerformed(ActionEvent e) {
                 initialize();
+
             }
         });
 
@@ -71,15 +76,14 @@ public class MazeModeIndex {
         enter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                seed = seedText.getText();
                 try {
+                    seed = Long.parseLong(seedText.getText());
                     Length = Integer.parseInt(LengthText.getText());
                     Width = Integer.parseInt(WidthText.getText());
-                    System.out.println("Seed: " + seed);
-                    System.out.println("Length: " + Length);
-                    System.out.println("Width: " + Width);
+                    MazeMode mazeMode = new MazeMode(seed, Length, Width);
+                    mazeMode.generate();
                 } catch (NumberFormatException ex) {
-                    System.out.println("输入的长度或宽度不是有效的整数！");
+                    System.out.println("输入的种子或长度或宽度不是有效的整数！");
                 }
             }
         });
@@ -87,5 +91,28 @@ public class MazeModeIndex {
         // 重新绘制 panel
         panel.revalidate();
         panel.repaint();
+    }
+
+    /**
+     * 设置显示位置位于中央
+     */
+    private void setLocation(){
+        // 设置显示在屏幕中央
+        // 获取屏幕尺寸
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
+        // 获取窗口尺寸
+        Dimension windowSize = mazeModeIndex.getSize();
+        int windowWidth = windowSize.width;
+        int windowHeight = windowSize.height;
+
+        // 计算窗口居中位置
+        int x = (screenWidth - windowWidth) / 2;
+        int y = (screenHeight - windowHeight) / 2;
+
+        // 设置窗口位置
+        mazeModeIndex.setLocation(x, y);
     }
 }

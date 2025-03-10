@@ -13,7 +13,7 @@ public class WorldGeneration {
     public int LENGTH;
     // 世界的宽度（y轴）
     public int WIDTH;
-    private int seed;
+    private long seed;
     public Random RandomSeed = new Random(seed);
    // 核心：瓦片构成的数组，长度为LENGTH，宽度为WIDTH
     public TETile[][] tiles;
@@ -27,7 +27,7 @@ public class WorldGeneration {
 
 
     // 构造器，根据传入的长和宽和种子依次调用外部生成函数、内部生成函数和内部确认连接函数，来对tiles进行修改，得到一个随机的tiles
-    public WorldGeneration(int LENGTH, int WIDTH, int seed){
+    public WorldGeneration(int LENGTH, int WIDTH, long seed){
         this.LENGTH = LENGTH;
         this.WIDTH = WIDTH;
         this.seed = seed;
@@ -35,7 +35,7 @@ public class WorldGeneration {
         world = tiles;
         OutsideGeneration();
         RoadGeneration();
-        padNOTHING();
+        populateNOTHING();
     }
 
     /** @Test 仅供test使用
@@ -49,7 +49,7 @@ public class WorldGeneration {
             world = tiles;
             OutsideGeneration();
             RoadGeneration();
-            padNOTHING();
+            populateNOTHING();
         }
     }
 
@@ -60,7 +60,7 @@ public class WorldGeneration {
      */
     public void WorldRender(){
 
-//        worldRender.initialize(this.LENGTH, this.WIDTH);
+        worldRender.initialize(this.LENGTH, this.WIDTH);
         worldRender.renderFrame(this.tiles);
     }
 
@@ -123,7 +123,7 @@ public class WorldGeneration {
      *
      */
 
-    public void padNOTHING(){
+    public void populateNOTHING(){
         for(int i = 0; i < LENGTH; i ++){
             for(int j = 0;j < WIDTH; j ++){
                 if(tiles[i][j] == null){
