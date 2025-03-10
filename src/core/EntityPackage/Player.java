@@ -1,5 +1,6 @@
-package core;
+package core.EntityPackage;
 
+import core.WorldPackage.WorldGeneration;
 import edu.princeton.cs.algs4.StdDraw;
 
 import javax.imageio.ImageIO;
@@ -9,7 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class Player extends Entity{
+public class Player extends Entity {
 
 
     public Player (double x, double y)
@@ -147,7 +148,14 @@ public class Player extends Entity{
                 break;
         }
 
-        StdDraw.picture(x, y, String.valueOf(image));
+        // bug可能是stddraw库不支持这种格式的图片，将图片格式进行转化
+        BufferedImage convertedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = convertedImage.createGraphics();
+        g.drawImage(image, 0, 0, null);
+        g.dispose();
+
+
+//        StdDraw.picture(x, y, String.valueOf(image));
     }
 
 }

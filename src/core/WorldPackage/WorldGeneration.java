@@ -1,4 +1,4 @@
-package core;
+package core.WorldPackage;
 
 import tileengine.TERenderer;
 import tileengine.TETile;
@@ -60,7 +60,7 @@ public class WorldGeneration {
      */
     public void WorldRender(){
 
-        //worldRender.initialize(this.LENGTH, this.WIDTH);
+//        worldRender.initialize(this.LENGTH, this.WIDTH);
         worldRender.renderFrame(this.tiles);
     }
 

@@ -1,4 +1,4 @@
-import core.WorldGeneration;
+import core.WorldPackage.WorldGeneration;
 import tileengine.TETile;
 import tileengine.Tileset;
 

@@ -1,4 +1,4 @@
-package core;
+package core.WorldPackage;
 
 import java.awt.*;
 

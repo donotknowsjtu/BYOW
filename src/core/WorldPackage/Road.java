@@ -1,12 +1,10 @@
-package core;
+package core.WorldPackage;
 
 
-import org.junit.jupiter.api.Test;
 import tileengine.TETile;
 import tileengine.Tileset;
 
 import java.awt.*;
-import java.util.HashMap;
 import java.util.*;
 import java.util.List;
 

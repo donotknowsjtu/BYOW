@@ -1,5 +1,7 @@
 package core;
 
+import core.EntityPackage.Player;
+import core.WorldPackage.WorldGeneration;
 import tileengine.TERenderer;
 import edu.princeton.cs.algs4.StdDraw;
 import tileengine.TETile;

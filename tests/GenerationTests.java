@@ -1,4 +1,4 @@
-import core.WorldGeneration;
+import core.WorldPackage.WorldGeneration;
 
 public class GenerationTests {
     /** @Test for 内部和外部世界生成

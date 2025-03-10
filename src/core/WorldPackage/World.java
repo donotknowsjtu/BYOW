@@ -1,4 +1,4 @@
-package core;
+package core.WorldPackage;
 
 public class World {
 
