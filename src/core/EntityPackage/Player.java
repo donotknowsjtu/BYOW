@@ -1,8 +1,10 @@
 package core.EntityPackage;
 
+import core.GUI.GamePanel;
 import core.WorldPackage.WorldGeneration;
 import edu.princeton.cs.algs4.StdDraw;
 
+import utils.KeyHandler;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -12,17 +14,23 @@ import java.util.Objects;
 
 public class Player extends Entity {
 
+    GamePanel gp;
+    KeyHandler keyH;
 
-    public Player (double x, double y)
+    public Player(GamePanel gp , KeyHandler keyH)
     {
-        this.x = x;
-        this.y = y;
+        this.gp = gp;
+        this.keyH = keyH;
 
-        direction = "up";
-
+        setDefaultValue();
         getPlayerImage();
     }
-
+    public void setDefaultValue(){
+        x = 100.0;
+        y = 100.0;
+        speed = 4.0;
+        direction = "up";
+    }
 
 
 
@@ -49,33 +57,19 @@ public class Player extends Entity {
         }
     }
     public void update(){
-        double newX = x;
-        double newY = y;
-
-        if(StdDraw.isKeyPressed(KeyEvent.VK_W)){
+        if(keyH.upPressed){
             direction = "up";
-            newY += speed;
-        }
-        if (StdDraw.isKeyPressed(KeyEvent.VK_D)) {
+            y -= speed;
+        } else if (keyH.rightPressed) {
             direction = "right";
-            newX += speed;
-        }
-        if (StdDraw.isKeyPressed(KeyEvent.VK_X)) {
+            x += speed;
+        } else if (keyH.downPressed ) {
             direction = "down";
-            newY -= speed;
-        }
-        if (StdDraw.isKeyPressed(KeyEvent.VK_A)){
+            y += speed;
+        } else if (keyH.leftPressed) {
             direction = "left";
-            newX -= speed;
+            x -= speed;
         }
-        int tileX = (int) newX;
-        int tileY = (int) newY;
-
-        if(WorldGeneration.isTileWalkable(tileX,tileY)){
-            x = newX;
-            y = newY;
-        }
-
         CharacterCount++;
         if(CharacterCount > 12){
             if (CharacterStep < 4){
@@ -86,7 +80,8 @@ public class Player extends Entity {
             CharacterCount = 0;
         }
     }
-    public void draw(){
+
+    public void draw(Graphics2D g2){
         BufferedImage image = null;
 
         switch (direction){
@@ -149,10 +144,10 @@ public class Player extends Entity {
         }
 
         // bug可能是stddraw库不支持这种格式的图片，将图片格式进行转化
-        BufferedImage convertedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = convertedImage.createGraphics();
-        g.drawImage(image, 0, 0, null);
-        g.dispose();
+        //BufferedImage convertedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        //Graphics2D g = convertedImage.createGraphics();
+        g2.drawImage(image, 0, 0, null);
+        //g.dispose();
 
 
 //        StdDraw.picture(x, y, String.valueOf(image));
