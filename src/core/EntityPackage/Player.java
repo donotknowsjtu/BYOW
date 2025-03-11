@@ -25,9 +25,12 @@ public class Player extends Entity {
         setDefaultValue();
         getPlayerImage();
     }
+
+
+    //设置初始位置，后期根据房间坐标而更改（考虑坐标修改转移到初始化中）
     public void setDefaultValue(){
-        x = 100.0;
-        y = 100.0;
+        x = 100;
+        y = 100;
         speed = 4.0;
         direction = "up";
     }
@@ -146,7 +149,7 @@ public class Player extends Entity {
         // bug可能是stddraw库不支持这种格式的图片，将图片格式进行转化
         //BufferedImage convertedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
         //Graphics2D g = convertedImage.createGraphics();
-        g2.drawImage(image, 0, 0, null);
+        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
         //g.dispose();
 
 

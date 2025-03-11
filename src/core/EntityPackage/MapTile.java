@@ -1,5 +1,6 @@
 package core.EntityPackage;
 
+import core.GUI.GamePanel;
 import net.sf.saxon.expr.Component;
 
 import javax.imageio.ImageIO;
@@ -11,19 +12,22 @@ import java.util.Objects;
 public class MapTile extends Entity{
     int TileType;//地图砖块类型（0为墙，1为地板）（后续新定义再追加）
     BufferedImage Wall, Floor;
+    int TileSize;
+    GamePanel gp;
 
-    public MapTile(int x , int y ,int TY){
+    public MapTile(int x , int y ,int TY, int tileSize){
         this.x = x;
         this.y = y;
         this.TileType = TY;
+        this.TileSize = tileSize;
 
         getPlayerImage();
     }
 
     public void getPlayerImage(){
         try{
-            Wall = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/wall.png")));
-            Floor = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/floor.png")));
+            Wall = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Map/Wall.png")));
+            Floor = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Map/Floor.png")));
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -36,7 +40,7 @@ public class MapTile extends Entity{
         } else if (TileType == 1) {
             M_image = Floor;
         }
-        //GM.drawImage(M_image, x, y, );
+        GM.drawImage(M_image, x, y, TileSize, TileSize, null);
 
     }
 }

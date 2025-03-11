@@ -14,14 +14,14 @@ import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable{
     //屏幕设置
-    final int originalTileSize = 48;//设置默认图块尺寸
+    final int originalTileSize = 16;//设置默认图块尺寸
     final int scale = 2;//设置缩放比例
 
     public final int tileSize = originalTileSize * scale;
-    final int maxScreenCol = 8;//设置8列屏幕比例长度
-    final int maxScreenRow = 6;//设置6行屏幕比例长度
+    final int maxScreenCol = 24;//设置24列屏幕比例长度
+    final int maxScreenRow = 18;//设置18行屏幕比例长度
     final int screenWidth = tileSize * maxScreenCol;//确定窗口真实宽度
-    final int screenHeight = tileSize * maxScreenRow;//确定真实长度
+    final int screenHeight = tileSize * maxScreenRow;//确定真实长度（关于窗口大小，后期根据输入seed进行动态更改）
 
     //设置FPS
     int FPS = 60;
@@ -31,10 +31,10 @@ public class GamePanel extends JPanel implements Runnable{
 
     KeyHandler keyH = new KeyHandler();
     Player player = new Player(this,keyH);
-    gamegeneration gg;
+    gamegeneration gg = new gamegeneration(this);
 
     public GamePanel(){
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight));//后期根据输入seed更改
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
@@ -93,7 +93,9 @@ public class GamePanel extends JPanel implements Runnable{
         gg.TileType();
         for(int x = 0; x < gg.MT.length; x++) {
             for (int y = 0; y < gg.MT[x].length; y++) {
-                gg.MT[x][y].draw(g2);
+                if(gg.MT[x][y] != null) {
+                    gg.MT[x][y].draw(g2);
+                }
             }
         }
 
