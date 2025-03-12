@@ -1,8 +1,10 @@
 package core.GUI;
 
+import core.Collisionchecker.CollisionChecker;
 import core.EntityPackage.Player;
 import core.GameGeneration.gamegeneration;
 
+import org.checkerframework.checker.units.qual.C;
 import utils.KeyHandler;
 
 import javax.swing.*;
@@ -25,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable{
     final int screenHeight = tileSize * maxScreenRow;//确定真实长度（关于窗口大小，后期根据输入seed进行动态更改）
 
     //设置FPS
-    int FPS = 120;
+    int FPS = 80;
 
 
     Thread gameThread;
@@ -36,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable{
     KeyHandler keyH = new KeyHandler();
     Player player = new Player(this,keyH);
     gamegeneration gg = new gamegeneration(this);
+    public CollisionChecker CC = new CollisionChecker(this, gg);
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));//后期根据输入seed更改

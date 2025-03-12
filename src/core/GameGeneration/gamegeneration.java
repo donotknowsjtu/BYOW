@@ -30,15 +30,15 @@ public class gamegeneration {
 
 
 
-//根据世界数组确定该生成的砖块
+    //根据世界数组确定该生成的砖块
     public void TileType(){
         int tileSize = gp.tileSize;
         for(int x = 0; x < testTiles.length; x++){
-            for (int y = 0; y <testTiles[x].length; y++){
+            for (int y = 0; y < testTiles[x].length; y++){
                 if(testTiles[x][y] == Tileset.WALL){
-                    MT[x][y] = new MapTile(x * tileSize, y * tileSize, 0, tileSize);
+                    MT[x][y] = new MapTile(x * tileSize, y * tileSize, 0, tileSize ,true);
                 } else if (testTiles[x][y] == Tileset.FLOOR) {
-                    MT[x][y] = new MapTile(x * tileSize, y * tileSize, 1, tileSize);
+                    MT[x][y] = new MapTile(x * tileSize, y * tileSize, 1, tileSize, false);
                 } else if (testTiles[x][y] == Tileset.NOTHING) {
                     MT[x][y] = null;
                 }

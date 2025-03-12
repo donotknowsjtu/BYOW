@@ -24,14 +24,20 @@ public class Player extends Entity {
 
         setDefaultValue();
         getPlayerImage();
+
+        CollisionRect = new Rectangle();
+        CollisionRect.x = 3;
+        CollisionRect.y = 6;
+        CollisionRect.width = 10;
+        CollisionRect.height =10;
     }
 
 
     //设置初始位置，后期根据房间坐标而更改（考虑坐标修改转移到初始化中）
     public void setDefaultValue(){
-        x = 100;
+        x = 50;
         y = 100;
-        speed = 4.0;
+        speed = 2;
         direction = "up";
     }
 
@@ -60,31 +66,49 @@ public class Player extends Entity {
         }
     }
     public void update(){
-        int NewX = x;
-        int NewY = y;
 
-        if(keyH.upPressed){
-            direction = "up";
-            y -= speed;
-        } else if (keyH.rightPressed) {
-            direction = "right";
-            x += speed;
-        } else if (keyH.downPressed ) {
-            direction = "down";
-            y += speed;
-        } else if (keyH.leftPressed) {
-            direction = "left";
-            x -= speed;
-        }
-        CharacterCount++;
-        if(CharacterCount > 12){
-            if (CharacterStep < 4){
-                CharacterStep++;
-            }else{
-                CharacterStep = 1;
+        if(keyH.upPressed ||keyH.downPressed ||keyH.leftPressed ||keyH.rightPressed ) {
+            if (keyH.upPressed) {
+                direction = "up";
+            } else if (keyH.rightPressed) {
+                direction = "right";
+            } else if (keyH.downPressed) {
+                direction = "down";
+            } else if (keyH.leftPressed) {
+                direction = "left";
             }
-            CharacterCount = 0;
+            isCollision = false;
+            gp.CC.checker(this);
+
+            if (!isCollision) {
+                switch (direction) {
+                    case "up":
+                        y -= speed;
+                        break;
+                    case "down":
+                        y += speed;
+                        break;
+                    case "left":
+                        x -= speed;
+                        break;
+                    case "right":
+                        x += speed;
+                        break;
+                }
+
+            }
+
+            CharacterCount++;
+            if (CharacterCount > 12) {
+                if (CharacterStep < 4) {
+                    CharacterStep++;
+                } else {
+                    CharacterStep = 1;
+                }
+                CharacterCount = 0;
+            }
         }
+
 
 
     }

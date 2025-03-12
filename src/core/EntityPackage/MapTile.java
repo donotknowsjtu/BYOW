@@ -10,16 +10,17 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class MapTile extends Entity{
-    int TileType;//地图砖块类型（0为墙，1为地板）（后续新定义再追加）
+    public int TileType;//地图砖块类型（0为墙，1为地板）（后续新定义再追加）
     BufferedImage Wall, Floor;
     int TileSize;
-    GamePanel gp;
+    public boolean collision;
 
-    public MapTile(int x , int y ,int TY, int tileSize){
+    public MapTile(int x , int y ,int TY, int tileSize, boolean collision){
         this.x = x;
         this.y = y;
         this.TileType = TY;
         this.TileSize = tileSize;
+        this.collision = collision;
 
         getPlayerImage();
     }
