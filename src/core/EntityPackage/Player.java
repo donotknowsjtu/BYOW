@@ -60,6 +60,9 @@ public class Player extends Entity {
         }
     }
     public void update(){
+        int NewX = x;
+        int NewY = y;
+
         if(keyH.upPressed){
             direction = "up";
             y -= speed;
@@ -82,6 +85,8 @@ public class Player extends Entity {
             }
             CharacterCount = 0;
         }
+
+
     }
 
     public void draw(Graphics2D g2){

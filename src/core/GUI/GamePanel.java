@@ -2,11 +2,12 @@ package core.GUI;
 
 import core.EntityPackage.Player;
 import core.GameGeneration.gamegeneration;
-import core.GameGeneration.gamegeneration;
+
 import utils.KeyHandler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 
 //游戏内部窗口信息设置
@@ -15,20 +16,23 @@ import java.awt.*;
 public class GamePanel extends JPanel implements Runnable{
     //屏幕设置
     final int originalTileSize = 16;//设置默认图块尺寸
-    final int scale = 2;//设置缩放比例
+    final int scale = 1;//设置缩放比例
 
     public final int tileSize = originalTileSize * scale;
-    final int maxScreenCol = 24;//设置24列屏幕比例长度
-    final int maxScreenRow = 18;//设置18行屏幕比例长度
+    final int maxScreenCol = 48;//设置24列屏幕比例长度
+    final int maxScreenRow = 48;//设置18行屏幕比例长度
     final int screenWidth = tileSize * maxScreenCol;//确定窗口真实宽度
     final int screenHeight = tileSize * maxScreenRow;//确定真实长度（关于窗口大小，后期根据输入seed进行动态更改）
 
     //设置FPS
-    int FPS = 60;
+    int FPS = 120;
 
 
     Thread gameThread;
 
+
+    // 新增缓冲图像
+    private BufferedImage staticMapBuffer;
     KeyHandler keyH = new KeyHandler();
     Player player = new Player(this,keyH);
     gamegeneration gg = new gamegeneration(this);
@@ -39,6 +43,7 @@ public class GamePanel extends JPanel implements Runnable{
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+        generateStaticMapBuffer();// 初始化时预渲染静态地图
 
     }
 
@@ -80,6 +85,31 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
 
+
+    // 预渲染静态地图到缓冲图像
+    private void generateStaticMapBuffer() {
+        staticMapBuffer = new BufferedImage(
+                screenWidth,
+                screenHeight,
+                BufferedImage.TYPE_INT_ARGB
+        );
+        Graphics2D g2d = staticMapBuffer.createGraphics();
+
+        // 调用地图生成逻辑（确保 gg.TileType() 只生成静态内容）
+        gg.TileType();
+
+        // 绘制静态元素到缓冲
+        for(int x = 0; x < gg.MT.length; x++) {
+            for (int y = 0; y < gg.MT[x].length; y++) {
+                if(gg.MT[x][y] != null) {
+                    gg.MT[x][y].draw(g2d);
+                }
+            }
+        }
+        g2d.dispose();
+    }
+
+
     public void updata(){
         player.update();
     }
@@ -89,15 +119,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         Graphics2D g2 = (Graphics2D)g;
 
-        //地图绘制
-        gg.TileType();
-        for(int x = 0; x < gg.MT.length; x++) {
-            for (int y = 0; y < gg.MT[x].length; y++) {
-                if(gg.MT[x][y] != null) {
-                    gg.MT[x][y].draw(g2);
-                }
-            }
-        }
+        g2.drawImage(staticMapBuffer, 0, 0, null);
 
         //人物绘制
         player.draw(g2);
