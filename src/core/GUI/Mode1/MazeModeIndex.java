@@ -1,5 +1,7 @@
 package core.GUI.Mode1;
 
+import core.GUI.GamePanel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,7 +30,7 @@ public class MazeModeIndex {
         mazeModeIndex.setSize(1000, 800);
 
         // 设置屏幕显示位置
-        setLocation();
+        setLocation(mazeModeIndex);
 
         panel = new JPanel(new GridLayout(5, 1));
         newGame = new JButton("new game");
@@ -72,6 +74,10 @@ public class MazeModeIndex {
         panel.add(WidthText);
         panel.add(enter);
 
+        // 重新绘制 panel
+        panel.revalidate();
+        panel.repaint();
+
         // 监听 enter 按钮
         enter.addActionListener(new ActionListener() {
             @Override
@@ -80,23 +86,48 @@ public class MazeModeIndex {
                     seed = Long.parseLong(seedText.getText());
                     Length = Integer.parseInt(LengthText.getText());
                     Width = Integer.parseInt(WidthText.getText());
-                    MazeMode mazeMode = new MazeMode(seed, Length, Width);
-                    mazeMode.generate();
+//                    MazeMode mazeMode = new MazeMode(seed, Length, Width, mazeModeIndex);
+//                    // 清除frame中的其余组件
+//                    mazeModeIndex.remove(panel);
+//                    // 将@GamePanel在frame中生成
+//                    mazeMode.generate();
+//                    mazeMode.generate();
+//                    mazeModeIndex.revalidate();
+//                    mazeModeIndex.repaint();
+                    fireEnterClicked();
                 } catch (NumberFormatException ex) {
                     System.out.println("输入的种子或长度或宽度不是有效的整数！");
                 }
             }
         });
 
-        // 重新绘制 panel
-        panel.revalidate();
-        panel.repaint();
+
     }
+
+    // enter键被按下，生成逃离迷宫游戏界面
+    private void fireEnterClicked() {
+        new Thread(() -> {
+            // 新建MazeMode界面
+            MazeMode mazeMode = new MazeMode(seed, Length, Width);
+            mazeMode.generate();
+            // 延迟关闭 home frame
+            try {
+                Thread.sleep(500); // 延迟 500ms 关闭 home frame
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            // 假装关闭 home frame（隐藏）
+            mazeModeIndex.setVisible(false);
+        }).start();
+    }
+
+
+
 
     /**
      * 设置显示位置位于中央
      */
-    private void setLocation(){
+    private void setLocation(JFrame frame){
         // 设置显示在屏幕中央
         // 获取屏幕尺寸
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -104,7 +135,7 @@ public class MazeModeIndex {
         int screenHeight = screenSize.height;
 
         // 获取窗口尺寸
-        Dimension windowSize = mazeModeIndex.getSize();
+        Dimension windowSize = frame.getSize();
         int windowWidth = windowSize.width;
         int windowHeight = windowSize.height;
 
@@ -113,6 +144,6 @@ public class MazeModeIndex {
         int y = (screenHeight - windowHeight) / 2;
 
         // 设置窗口位置
-        mazeModeIndex.setLocation(x, y);
+        frame.setLocation(x, y);
     }
 }

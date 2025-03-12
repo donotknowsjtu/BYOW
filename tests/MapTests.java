@@ -1,5 +1,4 @@
 import core.GUI.GamePanel;
-import core.GameGeneration.gamegeneration;
 
 import javax.swing.*;
 
@@ -10,7 +9,7 @@ public class MapTests {
         window.setResizable(false);
         window.setTitle("My 2Dgame");
 
-        GamePanel gamePanel = new GamePanel();
+        GamePanel gamePanel = new GamePanel(50, 50, 1000);
         window.add(gamePanel);
 
         window.pack();

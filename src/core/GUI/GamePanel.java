@@ -3,9 +3,8 @@ package core.GUI;
 import core.Collisionchecker.CollisionChecker;
 import core.EntityPackage.NPC.BoneSoldier;
 import core.EntityPackage.Player;
-import core.GameGeneration.gamegeneration;
+import core.GameGeneration.GameGeneration;
 
-import org.checkerframework.checker.units.qual.C;
 import utils.KeyHandler;
 
 import javax.swing.*;
@@ -20,30 +19,55 @@ public class GamePanel extends JPanel implements Runnable{
     //屏幕设置
     final int originalTileSize = 16;//设置默认图块尺寸
     final int scale = 1;//设置缩放比例
-
     public final int tileSize = originalTileSize * scale;
-    final int maxScreenCol = 48;//设置24列屏幕比例长度
-    final int maxScreenRow = 48;//设置18行屏幕比例长度
-    final int screenWidth = tileSize * maxScreenCol;//确定窗口真实宽度
-    final int screenHeight = tileSize * maxScreenRow;//确定真实长度（关于窗口大小，后期根据输入seed进行动态更改）
 
+
+
+
+    public int maxScreenCol ;//列数
+    public int maxScreenRow ;//行数
+    final int screenWidth; //确定窗口真实宽度
+    final int screenHeight;//确定真实长度（关于窗口大小，后期根据输入seed进行动态更改）
+    public long seed; // 种子
     //设置FPS
     int FPS = 120;
-
-
+    // 玩家
+    Player player;
+    // npc
+    BoneSoldier BoneSoldier1;
+    // 碰撞处理类
+    public CollisionChecker CC;
+    // gamegeneration
+    GameGeneration gg;
     Thread gameThread;
-
 
     // 新增缓冲图像
     private BufferedImage staticMapBuffer;
     KeyHandler keyH = new KeyHandler();
-    Player player = new Player(this,keyH);
-        // npc
-    BoneSoldier BoneSoldier1 = new BoneSoldier(this);
-    gamegeneration gg = new gamegeneration(this);
-    public CollisionChecker CC = new CollisionChecker(this, gg);
 
-    public GamePanel(){
+    /**
+     *
+     * 根据玩家传入的地图行数和列数和种子来生成地图
+     * @param maxScreenRow 行数
+     * @param maxScreenCol 列数
+     */
+    public GamePanel(int maxScreenRow, int maxScreenCol, long seed){
+        this.maxScreenCol = maxScreenCol;
+        this.maxScreenRow = maxScreenRow;
+        /**
+         * 非常重要！！！，初始化一个元素前如果这个元素就被别的元素使用了，那么必须重新初始化唉巴拉巴拉我说不明白反正就报错了
+         */
+        screenWidth = tileSize * maxScreenCol;
+        screenHeight = tileSize * maxScreenRow;
+
+        player = new Player(this,keyH);
+        // npc
+        BoneSoldier1 = new BoneSoldier(this);
+        gg = new GameGeneration(this);
+        CC = new CollisionChecker(this, gg);
+
+
+        this.seed = seed;
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));//后期根据输入seed更改
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);

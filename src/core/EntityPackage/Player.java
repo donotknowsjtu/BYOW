@@ -28,8 +28,8 @@ public class Player extends Entity {
         CollisionRect = new Rectangle();
         CollisionRect.x = 3;
         CollisionRect.y = 6;
-        CollisionRect.width = 10;
-        CollisionRect.height =10;
+        CollisionRect.width = 6;
+        CollisionRect.height = 6;
     }
 
 

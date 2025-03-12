@@ -37,7 +37,7 @@ public class BoneSoldier extends Entity {
     private void setDefaultValue(){
         x = 100;
         y = 100;
-        speed = 4.0;
+        speed = 2;
     }
 
     private void getBoneSoldierImage() {

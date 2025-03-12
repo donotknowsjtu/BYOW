@@ -121,14 +121,14 @@ public class Road {
             // 向左建墙
             if(x > 0 && tiles[x - 1][y] != Tileset.FLOOR){tiles[x - 1][y] = Tileset.WALL;}
             // 向上建墙
-            if(y < LENGTH - 1 && tiles[x][y + 1] != Tileset.FLOOR){tiles[x][y + 1] = Tileset.WALL;}
+            if(y < WIDTH - 1 && tiles[x][y + 1] != Tileset.FLOOR){tiles[x][y + 1] = Tileset.WALL;}
             // 向下建墙
             if(y > 0 && tiles[x][y - 1] != Tileset.FLOOR){tiles[x][y - 1] = Tileset.WALL;}
         }else{
             // 向右建墙
-            if(x < WIDTH - 1 && tiles[x + 1][y] != Tileset.FLOOR){tiles[x + 1][y] = Tileset.WALL;}
+            if(x < LENGTH - 1 && tiles[x + 1][y] != Tileset.FLOOR){tiles[x + 1][y] = Tileset.WALL;}
             // 向上建墙
-            if(y < LENGTH - 1 && tiles[x][y + 1] != Tileset.FLOOR){tiles[x][y + 1] = Tileset.WALL;}
+            if(y < WIDTH - 1 && tiles[x][y + 1] != Tileset.FLOOR){tiles[x][y + 1] = Tileset.WALL;}
             // 向下建墙
             if(y > 0 && tiles[x][y - 1] != Tileset.FLOOR){tiles[x][y - 1] = Tileset.WALL;}
         }
@@ -147,14 +147,14 @@ public class Road {
             // 向左建墙
             if(x > 0 && tiles[x - 1][y] != Tileset.FLOOR){tiles[x - 1][y] = Tileset.WALL;}
             // 向右建墙
-            if(x < WIDTH - 1 && tiles[x + 1][y] != Tileset.FLOOR){tiles[x + 1][y] = Tileset.WALL;}
+            if(x < LENGTH - 1 && tiles[x + 1][y] != Tileset.FLOOR){tiles[x + 1][y] = Tileset.WALL;}
         }else{
             // 向上建墙
-            if(y < LENGTH - 1 && tiles[x][y + 1] != Tileset.FLOOR){tiles[x][y + 1] = Tileset.WALL;}
+            if(y < WIDTH - 1 && tiles[x][y + 1] != Tileset.FLOOR){tiles[x][y + 1] = Tileset.WALL;}
             // 左侧建墙
             if(x > 0 && tiles[x - 1][y] != Tileset.FLOOR){tiles[x - 1][y] = Tileset.WALL;}
             // 右侧建墙
-            if(x < WIDTH - 1 && tiles[x + 1][y] != Tileset.FLOOR){tiles[x + 1][y] = Tileset.WALL;}
+            if(x < LENGTH - 1 && tiles[x + 1][y] != Tileset.FLOOR){tiles[x + 1][y] = Tileset.WALL;}
     }
 }
 
