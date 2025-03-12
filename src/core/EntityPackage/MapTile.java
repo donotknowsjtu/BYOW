@@ -1,7 +1,6 @@
 package core.EntityPackage;
 
 import core.GUI.GamePanel;
-import net.sf.saxon.expr.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -22,10 +21,10 @@ public class MapTile extends Entity{
         this.TileSize = tileSize;
         this.collision = collision;
 
-        getPlayerImage();
+        getMapPlayerImage();
     }
 
-    public void getPlayerImage(){
+    public void getMapPlayerImage(){
         try{
             Wall = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Map/Wall.png")));
             Floor = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Map/Floor.png")));

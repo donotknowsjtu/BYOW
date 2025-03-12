@@ -1,6 +1,7 @@
 package core.GUI;
 
 import core.Collisionchecker.CollisionChecker;
+import core.EntityPackage.NPC.BoneSoldier;
 import core.EntityPackage.Player;
 import core.GameGeneration.gamegeneration;
 
@@ -27,7 +28,7 @@ public class GamePanel extends JPanel implements Runnable{
     final int screenHeight = tileSize * maxScreenRow;//确定真实长度（关于窗口大小，后期根据输入seed进行动态更改）
 
     //设置FPS
-    int FPS = 80;
+    int FPS = 120;
 
 
     Thread gameThread;
@@ -37,6 +38,8 @@ public class GamePanel extends JPanel implements Runnable{
     private BufferedImage staticMapBuffer;
     KeyHandler keyH = new KeyHandler();
     Player player = new Player(this,keyH);
+        // npc
+    BoneSoldier BoneSoldier1 = new BoneSoldier(this);
     gamegeneration gg = new gamegeneration(this);
     public CollisionChecker CC = new CollisionChecker(this, gg);
 
@@ -115,7 +118,10 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void updata(){
         player.update();
+        BoneSoldier1.update(player);
     }
+
+
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g) ;
@@ -126,6 +132,8 @@ public class GamePanel extends JPanel implements Runnable{
 
         //人物绘制
         player.draw(g2);
+        // npc绘制
+        BoneSoldier1.draw(g2);
         g2.dispose();
 
     }
