@@ -1,4 +1,4 @@
-import core.WorldPackage.WorldGeneration;
+import core.WorldPackage.WorldTiles;
 import tileengine.TETile;
 import tileengine.Tileset;
 
@@ -12,8 +12,8 @@ public class RoomGenerationTests {
             }
 
 
-            WorldGeneration worldGeneration = new WorldGeneration(testTiles, 1234, 48, 48, true);
-            //worldGeneration.WorldRender();
+            WorldTiles worldTiles = new WorldTiles(testTiles, 1234, 48, 48, true);
+            //worldTiles.WorldRender();
         }
 }
 

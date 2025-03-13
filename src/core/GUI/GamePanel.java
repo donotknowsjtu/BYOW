@@ -3,7 +3,7 @@ package core.GUI;
 import core.Collisionchecker.CollisionChecker;
 import core.EntityPackage.NPC.BoneSoldier;
 import core.EntityPackage.Player;
-import core.GameGeneration.GameGeneration;
+import core.WorldPackage.WorldGeneration;
 
 import utils.KeyHandler;
 
@@ -38,7 +38,7 @@ public class GamePanel extends JPanel implements Runnable{
     // 碰撞处理类
     public CollisionChecker CC;
     // gamegeneration
-    GameGeneration gg;
+    WorldGeneration gg;
     Thread gameThread;
 
     // 新增缓冲图像
@@ -63,7 +63,7 @@ public class GamePanel extends JPanel implements Runnable{
         player = new Player(this,keyH);
         // npc
         BoneSoldier1 = new BoneSoldier(this);
-        gg = new GameGeneration(this);
+        gg = new WorldGeneration(this);
         CC = new CollisionChecker(this, gg);
 
 

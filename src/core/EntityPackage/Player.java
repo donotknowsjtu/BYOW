@@ -1,13 +1,10 @@
 package core.EntityPackage;
 
 import core.GUI.GamePanel;
-import core.WorldPackage.WorldGeneration;
-import edu.princeton.cs.algs4.StdDraw;
 
 import utils.KeyHandler;
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;

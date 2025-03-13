@@ -14,14 +14,14 @@ public class Road {
     private Random RandomSeed;
     private int LENGTH, WIDTH;
 
-    public Road(WorldGeneration worldGeneration){
-        this.tiles = worldGeneration.tiles;
-        this.RandomSeed = worldGeneration.RandomSeed;
-        this.LENGTH = worldGeneration.LENGTH;
-        this.WIDTH = worldGeneration.WIDTH;
+    public Road(WorldTiles worldTiles){
+        this.tiles = worldTiles.tiles;
+        this.RandomSeed = worldTiles.RandomSeed;
+        this.LENGTH = worldTiles.LENGTH;
+        this.WIDTH = worldTiles.WIDTH;
         this.room_center_points = new ArrayList<>();
         // 将rooms列表中的room的中心点全部读取并分别存储到room_center_points列表里
-        for(Room room : worldGeneration.rooms){
+        for(Room room : worldTiles.rooms){
 
             this.room_center_points.add(room.centerPoint);
         }

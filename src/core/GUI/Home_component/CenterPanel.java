@@ -52,7 +52,7 @@ public class CenterPanel extends JPanel {
     private void fireButton1Clicked(){
         new Thread(() -> {
                 // 新建MazeMode首页
-                MazeModeIndex mazeModeIndex = new MazeModeIndex();
+                MazeModeIndex mazeModeIndex = new MazeModeIndex(home);
                 mazeModeIndex.generate();
 
                 // 延迟关闭 home frame

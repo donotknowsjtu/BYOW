@@ -1,11 +1,8 @@
 package core.GUI.Mode1;
 
 import core.GUI.GamePanel;
-import core.WorldPackage.WorldGeneration;
-import tileengine.TETile;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  *

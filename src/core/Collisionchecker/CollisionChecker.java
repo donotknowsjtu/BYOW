@@ -3,14 +3,14 @@ package core.Collisionchecker;
 import core.EntityPackage.Entity;
 import core.EntityPackage.MapTile;
 import core.GUI.GamePanel;
-import core.GameGeneration.GameGeneration;
+import core.WorldPackage.WorldGeneration;
 
 public class CollisionChecker {
     public GamePanel gp; // 游戏面板对象，用于获取游戏界面的相关信息
-    public GameGeneration gg; // 游戏生成器对象，用于获取地图数据
+    public WorldGeneration gg; // 游戏生成器对象，用于获取地图数据
 
     // 构造函数，初始化碰撞检测器
-    public CollisionChecker(GamePanel gp, GameGeneration gg){
+    public CollisionChecker(GamePanel gp, WorldGeneration gg){
         this.gp = gp;
         this.gg = gg;
     }

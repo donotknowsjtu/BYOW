@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class WorldGeneration {
+public class WorldTiles {
     // 世界的长度（x轴）
     public int LENGTH;
     // 世界的宽度（y轴）
@@ -27,7 +27,7 @@ public class WorldGeneration {
 
 
     // 构造器，根据传入的长和宽和种子依次调用外部生成函数、内部生成函数和内部确认连接函数，来对tiles进行修改，得到一个随机的tiles
-    public WorldGeneration(int LENGTH, int WIDTH, long seed){
+    public WorldTiles(int LENGTH, int WIDTH, long seed){
         this.LENGTH = LENGTH;
         this.WIDTH = WIDTH;
         this.seed = seed;
@@ -40,7 +40,7 @@ public class WorldGeneration {
 
     /** @Test 仅供test使用
      * @Author 张书源 **/
-    public WorldGeneration(TETile[][] tiles,int seed,int LENGTH, int WIDTH, boolean isTest){
+    public WorldTiles(TETile[][] tiles, int seed, int LENGTH, int WIDTH, boolean isTest){
         if(isTest == true) {
             this.tiles = tiles;
             this.seed = seed;

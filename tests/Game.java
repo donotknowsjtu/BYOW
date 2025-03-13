@@ -1,7 +1,5 @@
-package core;
-
 import core.EntityPackage.Player;
-import core.WorldPackage.WorldGeneration;
+import core.WorldPackage.WorldTiles;
 import tileengine.TERenderer;
 import edu.princeton.cs.algs4.StdDraw;
 import tileengine.TETile;
@@ -13,14 +11,14 @@ import java.util.Arrays;
 public class Game {
     private TERenderer ter = new TERenderer();
     private Player player;
-    WorldGeneration wg;
+    WorldTiles wg;
     public Game(){}
     public void initialize(){
         TETile[][] testTiles = new TETile[48][48];
         for (TETile[] row : testTiles) {
             Arrays.fill(row, Tileset.NOTHING);
         }
-        wg = new WorldGeneration(testTiles, 1234, 48, 48, true);
+        wg = new WorldTiles(testTiles, 1234, 48, 48, true);
         ter.initialize(48,48);
 
 

@@ -1,6 +1,7 @@
 package core.GUI.Mode1;
 
-import core.GUI.GamePanel;
+import utils.RoundedJButton;
+import utils.RoundedJTextField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,18 +13,23 @@ import java.awt.event.ActionListener;
  */
 public class MazeModeIndex {
     private JFrame mazeModeIndex;
-    private JPanel panel;
+    private JPanel mazeModeIndexCenterPanel;
+    private JPanel escPanel;
     private long seed;
     private JButton newGame;
     private JButton history;
-    private JTextField seedText;
-    private JTextField LengthText;
-    private JTextField WidthText;
-    private JButton enter;
+    private RoundedJTextField seedText;
+    private RoundedJTextField LengthText;
+    private RoundedJTextField WidthText;
+    private RoundedJButton enter;
+    private RoundedJButton ESC;
     private int Length;
     private int Width;
+    private JFrame home;
+    private GridBagConstraints gbc = new GridBagConstraints();
 
-    public MazeModeIndex() {
+    public MazeModeIndex(JFrame home) {
+        this.home = home;
         mazeModeIndex = new JFrame("迷宫模式首页");
 
         mazeModeIndex.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,13 +38,14 @@ public class MazeModeIndex {
         // 设置屏幕显示位置
         setLocation(mazeModeIndex);
 
-        panel = new JPanel(new GridLayout(5, 1));
+        mazeModeIndexCenterPanel = new JPanel(new GridLayout(5, 1));
+        mazeModeIndexCenterPanel.setLayout(new GridBagLayout());
         newGame = new JButton("new game");
         history = new JButton("history");
-        panel.add(newGame);
-        panel.add(history);
+        // 设置布局
+        setGBC1();
 
-        mazeModeIndex.add(panel, BorderLayout.CENTER);
+        mazeModeIndex.add(mazeModeIndexCenterPanel, BorderLayout.CENTER);
     }
 
     public void generate() {
@@ -47,7 +54,6 @@ public class MazeModeIndex {
             @Override
             public void actionPerformed(ActionEvent e) {
                 initialize();
-
             }
         });
 
@@ -58,25 +64,35 @@ public class MazeModeIndex {
      * 生成文本框并获取 seed 和地图尺寸
      */
     private void initialize() {
+
+        // 处理中央面板
         // 移除 newGame 按钮
-        panel.remove(newGame);
-        panel.remove(history);
+        mazeModeIndexCenterPanel.remove(newGame);
+        mazeModeIndexCenterPanel.remove(history);
 
         // 创建新的 JTextField 和 JButton
-        seedText = new JTextField("please enter your seed.");
-        LengthText = new JTextField("please enter your wanted maze's length, which must be an Integer");
-        WidthText = new JTextField("please enter your wanted maze's width, which must be an Integer");
-        enter = new JButton("enter");
+        seedText = new RoundedJTextField("请输入你的种子");
+        LengthText = new RoundedJTextField("请输入地图长度");
+        WidthText = new RoundedJTextField("请输入地图宽度");
 
-        // 将新的组件添加到 panel
-        panel.add(seedText);
-        panel.add(LengthText);
-        panel.add(WidthText);
-        panel.add(enter);
+        // 设置为4行1列的网格布局，行间距为10
+        seedText.setPreferredSize(new Dimension(300, 40));
+        LengthText.setPreferredSize(new Dimension(300, 40));
+        WidthText.setPreferredSize(new Dimension(300, 40));
 
-        // 重新绘制 panel
-        panel.revalidate();
-        panel.repaint();
+        enter = new RoundedJButton("enter");
+
+        // 设置gbc布局
+        setGBC2();
+
+        // 重新绘制 mazeModeIndexCenterPanel
+        mazeModeIndexCenterPanel.revalidate();
+        mazeModeIndexCenterPanel.repaint();
+
+
+        // 添加左面板
+        addWestPanel();
+
 
         // 监听 enter 按钮
         enter.addActionListener(new ActionListener() {
@@ -86,17 +102,9 @@ public class MazeModeIndex {
                     seed = Long.parseLong(seedText.getText());
                     Length = Integer.parseInt(LengthText.getText());
                     Width = Integer.parseInt(WidthText.getText());
-//                    MazeMode mazeMode = new MazeMode(seed, Length, Width, mazeModeIndex);
-//                    // 清除frame中的其余组件
-//                    mazeModeIndex.remove(panel);
-//                    // 将@GamePanel在frame中生成
-//                    mazeMode.generate();
-//                    mazeMode.generate();
-//                    mazeModeIndex.revalidate();
-//                    mazeModeIndex.repaint();
                     fireEnterClicked();
                 } catch (NumberFormatException ex) {
-                    System.out.println("输入的种子或长度或宽度不是有效的整数！");
+                    JOptionPane.showMessageDialog(mazeModeIndex, "输入的种子或地图尺寸不是有效的整数！", "输入错误", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -122,12 +130,10 @@ public class MazeModeIndex {
     }
 
 
-
-
     /**
      * 设置显示位置位于中央
      */
-    private void setLocation(JFrame frame){
+    private void setLocation(JFrame frame) {
         // 设置显示在屏幕中央
         // 获取屏幕尺寸
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -146,4 +152,75 @@ public class MazeModeIndex {
         // 设置窗口位置
         frame.setLocation(x, y);
     }
+
+    /**
+     * 设置布局为GridBagConstraints布局
+     */
+    private void setGBC2() {
+
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 0, 10, 0); // 设置行间距
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        mazeModeIndexCenterPanel.add(seedText, gbc);
+
+        gbc.gridy = 1;
+        mazeModeIndexCenterPanel.add(LengthText, gbc);
+
+        gbc.gridy = 2;
+        mazeModeIndexCenterPanel.add(WidthText, gbc);
+
+        gbc.gridy = 3;
+        mazeModeIndexCenterPanel.add(enter, gbc);
+    }
+    /**
+     * 设置布局为GridBagConstraints布局
+     */
+    private void setGBC1() {
+
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 0, 10, 0); // 设置行间距
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        mazeModeIndexCenterPanel.add(newGame, gbc);
+
+        gbc.gridy = 1;
+        mazeModeIndexCenterPanel.add(history, gbc);
+    }
+    /**
+     * 添加左面板
+     */
+    public void addWestPanel(){
+        // 左面板
+        // 返回按钮
+        ESC = new RoundedJButton("ESC");
+        ESC.setPreferredSize(new Dimension(200, 100));
+        JPanel escPanel = new JPanel(new BorderLayout());
+        escPanel.add(ESC, BorderLayout.NORTH);
+        mazeModeIndex.add(escPanel, BorderLayout.WEST);
+
+        // 监听esc按钮
+        ESC.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                    // 中央面板移除组件
+                    mazeModeIndexCenterPanel.remove(seedText);
+                    mazeModeIndexCenterPanel.remove(LengthText);
+                    mazeModeIndexCenterPanel.remove(WidthText);
+                    mazeModeIndexCenterPanel.remove(enter);
+                    // 重新展示原组件
+                    setGBC1();
+                    // 中央面板重新绘制
+                    mazeModeIndexCenterPanel.revalidate();
+                    mazeModeIndexCenterPanel.repaint();
+                    // 移除esc面板
+                    mazeModeIndex.remove(escPanel);
+
+            }
+        });
+    }
+
 }
