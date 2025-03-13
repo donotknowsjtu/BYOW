@@ -22,9 +22,12 @@ public class BoneSoldier extends Entity {
      */
     GamePanel gp;
     Player player;
+    private static final Random random = new Random();
     int[] player_location = new int[2];
     public BoneSoldier(GamePanel gp){
         this.gp = gp;
+        this.direction = "up";
+        CollisionRect = new Rectangle(3,6,10,10);
         getBoneSoldierImage();
         setDefaultValue();
     }
@@ -33,8 +36,8 @@ public class BoneSoldier extends Entity {
      * 设置初始位置
      */
     private void setDefaultValue(){
-        x = 100;
-        y = 100;
+        x = 54;
+        y = 80;
         speed = 2;
     }
 
@@ -51,15 +54,25 @@ public class BoneSoldier extends Entity {
      */
     public void update(Player player){
         int[] direction = {player.x - this.x, player.y - this.y};
-        if(new Random().nextInt(10) < 5){
-            if(direction[0] != 0){
-                this.x += (int) Math.signum(direction[0]) * speed;
+        isCollision = false;
+        gp.CC.checker(this);
+            if(direction[0] < 0 ){
+                this.direction = "left";
+            } else if (direction[0] > 0) {
+                this.direction = "right";
             }
-        }else {
-            if(direction[1] != 0){
-                this.y += (int) Math.signum(direction[1]) * speed;
+            if(direction[1] < 0){
+                this.direction = "up";
+            } else if (direction[1] > 0) {
+                this.direction = "down";
             }
-        }
+            if(!isCollision) {
+                if (random.nextInt(10) < 5) {
+                    this.x += (int) Math.signum(direction[0]) * speed;
+                } else {
+                    this.y += (int) Math.signum(direction[1]) * speed;
+                }
+            }
     }
 
     public void draw(Graphics2D g2){
