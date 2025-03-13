@@ -27,7 +27,7 @@ public class BoneSoldier extends Entity {
     public BoneSoldier(GamePanel gp){
         this.gp = gp;
         this.direction = "up";
-        CollisionRect = new Rectangle(3,6,10,10);
+        CollisionRect = new Rectangle(3,6,6,6);
         getBoneSoldierImage();
         setDefaultValue();
     }

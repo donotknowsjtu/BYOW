@@ -1,6 +1,8 @@
 package core.GUI.MazeModeIndexJFrame.JFrame;
 
 import core.GUI.MazeModeIndexJFrame.JPanel.CenterPanel1;
+import core.GUI.MazeModeIndexJFrame.JPanel.EscPanel1;
+import core.GUI.MazeModeIndexJFrame.JPanel.EscPanel2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +21,7 @@ public class MazeModeIndexJFrame extends JFrame{
         // 设置页面在屏幕中的显示位置
         setLocation(this);
         CenterPanel1 centerPanel1 = new CenterPanel1(this);
+//        EscPanel1 escPanel1 = new EscPanel1(this);
     }
 
 

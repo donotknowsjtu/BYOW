@@ -155,8 +155,8 @@ public class Road {
             if(x > 0 && tiles[x - 1][y] != Tileset.FLOOR){tiles[x - 1][y] = Tileset.WALL;}
             // 右侧建墙
             if(x < LENGTH - 1 && tiles[x + 1][y] != Tileset.FLOOR){tiles[x + 1][y] = Tileset.WALL;}
+        }
     }
-}
 
     /**
      * 将距离最近的房间的中心点连接起来
