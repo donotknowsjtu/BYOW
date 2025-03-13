@@ -1,7 +1,5 @@
 package core.EntityPackage;
 
-import core.GUI.GamePanel;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;

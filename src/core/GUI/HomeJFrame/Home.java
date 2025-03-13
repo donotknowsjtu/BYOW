@@ -1,6 +1,6 @@
-package core.GUI;
+package core.GUI.HomeJFrame;
 
-import core.GUI.Home_component.CenterPanel;
+import core.GUI.HomeJFrame.JPanel.CenterPanel;
 
 import javax.swing.*;
 import java.awt.*;

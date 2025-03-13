@@ -1,5 +1,5 @@
 package core.WorldPackage;
-import core.GUI.GamePanel;
+import core.GUI.MazeModeJFrame.JPanel.GamePanel;
 import core.EntityPackage.MapTile;
 import tileengine.TETile;
 import tileengine.Tileset;

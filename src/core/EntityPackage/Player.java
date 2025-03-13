@@ -1,6 +1,6 @@
 package core.EntityPackage;
 
-import core.GUI.GamePanel;
+import core.GUI.MazeModeJFrame.JPanel.GamePanel;
 
 import utils.KeyHandler;
 import javax.imageio.ImageIO;

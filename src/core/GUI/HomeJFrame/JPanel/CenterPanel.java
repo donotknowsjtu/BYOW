@@ -1,6 +1,6 @@
-package core.GUI.Home_component;
+package core.GUI.HomeJFrame.JPanel;
 
-import core.GUI.Mode1.MazeModeIndex;
+import core.GUI.MazeModeIndexJFrame.MazeModeIndex;
 
 import javax.swing.*;
 import java.awt.*;

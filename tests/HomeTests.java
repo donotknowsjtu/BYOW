@@ -1,4 +1,4 @@
-import core.GUI.Home;
+import core.GUI.HomeJFrame.Home;
 
 public class HomeTests {
     public static  void main(String args[]){

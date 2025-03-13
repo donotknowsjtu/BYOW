@@ -2,12 +2,10 @@ package core.EntityPackage.NPC;
 
 import core.EntityPackage.Entity;
 import core.EntityPackage.Player;
-import core.GUI.GamePanel;
-import utils.KeyHandler;
+import core.GUI.MazeModeJFrame.JPanel.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Random;

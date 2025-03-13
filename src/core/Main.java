@@ -1,6 +1,6 @@
 package core;
 
-import core.GUI.Home;
+import core.GUI.HomeJFrame.Home;
 
 public class Main {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package core.GUI;
+package core.GUI.MazeModeJFrame.JPanel;
 
 import core.Collisionchecker.CollisionChecker;
 import core.EntityPackage.NPC.BoneSoldier;

@@ -1,6 +1,6 @@
-package core.GUI.Mode1;
+package core.GUI.MazeModeJFrame;
 
-import core.GUI.GamePanel;
+import core.GUI.MazeModeJFrame.JPanel.GamePanel;
 
 import javax.swing.*;
 

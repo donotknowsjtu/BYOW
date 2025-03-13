@@ -2,7 +2,7 @@ package core.Collisionchecker;
 
 import core.EntityPackage.Entity;
 import core.EntityPackage.MapTile;
-import core.GUI.GamePanel;
+import core.GUI.MazeModeJFrame.JPanel.GamePanel;
 import core.WorldPackage.WorldGeneration;
 
 public class CollisionChecker {

@@ -1,5 +1,6 @@
-package core.GUI.Mode1;
+package core.GUI.MazeModeIndexJFrame;
 
+import core.GUI.MazeModeJFrame.MazeMode;
 import utils.RoundedJButton;
 import utils.RoundedJTextField;
 

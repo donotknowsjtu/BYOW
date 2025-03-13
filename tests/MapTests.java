@@ -1,4 +1,4 @@
-import core.GUI.GamePanel;
+import core.GUI.MazeModeJFrame.JPanel.GamePanel;
 
 import javax.swing.*;
 
