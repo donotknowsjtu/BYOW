@@ -38,7 +38,7 @@ public class GamePanel extends JPanel implements Runnable{
     // 碰撞处理类
     public CollisionChecker CC;
     // gamegeneration
-    WorldGeneration gg;
+    public WorldGeneration gg;
     Thread gameThread;
 
     // 新增缓冲图像
