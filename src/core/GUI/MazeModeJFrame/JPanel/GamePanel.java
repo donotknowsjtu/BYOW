@@ -2,6 +2,7 @@ package core.GUI.MazeModeJFrame.JPanel;
 
 import core.Collisionchecker.CollisionChecker;
 import core.EntityPackage.NPC.BoneSoldier;
+import core.EntityPackage.NPC.Knight;
 import core.EntityPackage.Player;
 import core.WorldPackage.WorldGeneration;
 
@@ -10,6 +11,7 @@ import utils.KeyHandler;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 
 //游戏内部窗口信息设置
@@ -35,10 +37,15 @@ public class GamePanel extends JPanel implements Runnable{
     Player player;
     // npc
     BoneSoldier BoneSoldier1;
+     // 骑士数量
+    int Knights_num;
+    ArrayList<Knight> Knights;
+     // 骑士种子，用于生成不同位置的骑士
+    int knight_seed;
     // 碰撞处理类
     public CollisionChecker CC;
     // gamegeneration
-    WorldGeneration gg;
+    public WorldGeneration wg;
     Thread gameThread;
 
     // 新增缓冲图像
@@ -60,11 +67,22 @@ public class GamePanel extends JPanel implements Runnable{
         screenWidth = tileSize * maxScreenCol;
         screenHeight = tileSize * maxScreenRow;
 
+        wg = new WorldGeneration(this);
+        CC = new CollisionChecker(this, wg);
+
+
         player = new Player(this,keyH);
         // npc
         BoneSoldier1 = new BoneSoldier(this);
-        gg = new WorldGeneration(this);
-        CC = new CollisionChecker(this, gg);
+        // 骑士数量暂定为3
+//        Knights_num = 3;
+//        knight_seed = 1234;
+//        for(int i = 0; i < Knights_num; i ++){
+//            Knights.add(new Knight(this, knight_seed));
+//            knight_seed += 100;
+//        }
+
+
 
 
         this.seed = seed;
@@ -125,14 +143,14 @@ public class GamePanel extends JPanel implements Runnable{
         );
         Graphics2D g2d = staticMapBuffer.createGraphics();
 
-        // 调用地图生成逻辑（确保 gg.TileType() 只生成静态内容）
-        gg.TileType();
+        // 调用地图生成逻辑（确保 wg.TileType() 只生成静态内容）
+        wg.TileType();
 
         // 绘制静态元素到缓冲
-        for(int x = 0; x < gg.MT.length; x++) {
-            for (int y = 0; y < gg.MT[x].length; y++) {
-                if(gg.MT[x][y] != null) {
-                    gg.MT[x][y].draw(g2d);
+        for(int x = 0; x < wg.MT.length; x++) {
+            for (int y = 0; y < wg.MT[x].length; y++) {
+                if(wg.MT[x][y] != null) {
+                    wg.MT[x][y].draw(g2d);
                 }
             }
         }
@@ -143,6 +161,9 @@ public class GamePanel extends JPanel implements Runnable{
     public void updata(){
         player.update();
         BoneSoldier1.update(player);
+//        for(Knight knight : Knights){
+//            knight.update(player);
+//        }
     }
 
 
@@ -158,6 +179,9 @@ public class GamePanel extends JPanel implements Runnable{
         player.draw(g2);
         // npc绘制
         BoneSoldier1.draw(g2);
+//        for(Knight knight : Knights){
+//            knight.draw(g2);
+//        }
         g2.dispose();
 
     }

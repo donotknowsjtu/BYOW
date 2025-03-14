@@ -38,7 +38,7 @@ public class BoneSoldier extends Entity {
     private void setDefaultValue(){
         x = 54;
         y = 80;
-        speed = 2;
+        speed = 4;
     }
 
     private void getBoneSoldierImage() {
@@ -52,29 +52,45 @@ public class BoneSoldier extends Entity {
     /**
      * 根据玩家的位置移动
      */
-    public void update(Player player){
-        int[] direction = {player.x - this.x, player.y - this.y};
+    public void update(Player player) {
+        int[] direction = new int[]{player.x - this.x, player.y - this.y};
         isCollision = false;
-        gp.CC.checker(this);
-            if(direction[0] < 0 ){
-                this.direction = "left";
-            } else if (direction[0] > 0) {
-                this.direction = "right";
-            }
-            if(direction[1] < 0){
-                this.direction = "up";
-            } else if (direction[1] > 0) {
-                this.direction = "down";
-            }
-            if(!isCollision) {
-                if (random.nextInt(10) < 5) {
-                    this.x += (int) Math.signum(direction[0]) * speed;
-                } else {
-                    this.y += (int) Math.signum(direction[1]) * speed;
-                }
-            }
-    }
 
+        while (this.x != player.x || this.y != player.y) {
+            direction[0] = player.x - this.x;
+            direction[1] = player.y - this.y;
+            if (random.nextInt(11) < 3) {
+                if(direction[1] <= 0){continue;}
+                this.direction = "up";
+                gp.CC.checker(this);
+                if (!isCollision) {
+                    this.y += speed;
+                }
+            } else if (random.nextInt(11) < 6) {
+                if(direction[1] >= 0){continue;}
+                this.direction = "down";
+                gp.CC.checker(this);
+                if (!isCollision) {
+                    this.y -= speed;
+                }
+            } else if (random.nextInt(11) < 9) {
+                if(direction[0] >= 0){continue;}
+                this.direction = "left";
+                gp.CC.checker(this);
+                if (!isCollision) {
+                    this.x -= speed;
+                }
+            } else {
+                if(direction[0] <= 0){continue;}
+                this.direction = "right";
+                gp.CC.checker(this);
+                if (!isCollision) {
+                    this.x += speed;
+                }
+
+            }
+        }
+    }
     public void draw(Graphics2D g2){
         g2.drawImage(up1, x, y, gp.tileSize, gp.tileSize, null);
     }
