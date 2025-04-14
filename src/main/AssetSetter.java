@@ -18,8 +18,13 @@ public class AssetSetter {
 
 
     public void setObject(){
+        gp.objects[0] = new OBJ_Door(gp);
+        gp.objects[0].worldX = gp.tileSize * 21;
+        gp.objects[0].worldY = gp.tileSize * 22;
 
-
+        gp.objects[1] = new OBJ_Door(gp);
+        gp.objects[1].worldX = gp.tileSize * 23;
+        gp.objects[1].worldY = gp.tileSize * 25;
     }
 
     public void setNPC(){

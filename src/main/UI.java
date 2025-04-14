@@ -1,9 +1,7 @@
 package main;
 
+import entity.Entity;
 import object.OBJ_Heart;
-import object.OBJ_Key;
-import object.SuperObject;
-import org.checkerframework.checker.units.qual.C;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -36,7 +34,7 @@ public class UI {
             q.printStackTrace();
         }
 
-        SuperObject heart = new OBJ_Heart(gp);
+        Entity heart = new OBJ_Heart(gp);
         heart_full = heart.image1;
         heart_half = heart.image2;
         heart_blank = heart.image3;
@@ -69,11 +67,25 @@ public class UI {
     }
 
     private void drawPlayerLife() {
+       
         int x = gp.tileSize / 2;
         int y = gp.tileSize / 2;
         int i = 0;
         while(i < gp.player.maxLife / 2){
             g2.drawImage(heart_blank, x, y, null);
+            i ++;
+            x += gp.tileSize;
+        }
+
+        x = gp.tileSize / 2;
+        y = gp.tileSize / 2;
+        i = 0;
+        while(i < gp.player.life){
+            g2.drawImage(heart_half, x, y, null);
+            i ++;
+            if(i < gp.player.life){
+                g2.drawImage(heart_full, x, y, null);
+            }
             i ++;
             x += gp.tileSize;
         }

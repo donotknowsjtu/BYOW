@@ -18,7 +18,6 @@ public class Entity {
     public int direction;
     public Rectangle solidArea;
     public int solidAreaDefaultX, solidAreaDefaultY;
-    public Boolean collisionOn;
     public int stepCount;
     public int actionLockCounter;
     public String dialogues[];
@@ -27,6 +26,12 @@ public class Entity {
     public int maxLife;
     public int life;
 
+
+    // Object
+    public BufferedImage image1, image2, image3;
+    public String name;
+    public boolean collisionOn;
+
     public Entity(GamePanel gp){
         this.gp = gp;
         this.stepCount = 1;
@@ -34,6 +39,8 @@ public class Entity {
         this.collisionOn = true;
         this.dialogues = new String[10];
         this.dialogueIndex = 0;
+        this.direction = Direction.UP;
+        this.solidArea = new Rectangle();
     }
     public void draw(Graphics2D g2){
         int screenX = this.worldX - gp.player.worldX + gp.player.screenX;
@@ -88,7 +95,7 @@ public class Entity {
         BufferedImage scaledImage = null;
         try {
             scaledImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
-            uTool.scaleImage(scaledImage, gp.tileSize, gp.tileSize);
+            scaledImage = uTool.scaleImage(scaledImage, gp.tileSize, gp.tileSize);
         } catch (IOException e){
             e.printStackTrace();
         }

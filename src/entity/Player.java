@@ -93,6 +93,10 @@ public class Player extends Entity{
             int npcIndex = gp.cChecker.checkEntity(this, gp.npcs);
             interactNpc(npcIndex);
 
+            // check event
+            gp.eHandler.checkEvent();
+
+            gp.keyHandler.Enter_pressed = false;
 
             if (!collisionOn) {
                 switch (direction) {
@@ -120,7 +124,7 @@ public class Player extends Entity{
                 gp.npcs[npcIndex].speak();
             }
         }
-        gp.keyHandler.Enter_pressed = false;
+
     }
 
     public void pickUpObject(int objIndex){

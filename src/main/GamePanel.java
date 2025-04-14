@@ -3,13 +3,13 @@ package main;
 
 import entity.Entity;
 import entity.Player;
-import entity.NPC_Soldier;
-import object.SuperObject;
-import org.apache.commons.lang3.ObjectUtils;
 import tile.TileManage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -34,12 +34,15 @@ public class GamePanel extends JPanel implements Runnable {
     public TileManage tileManage;
     public Player player;
     public Entity[] npcs;
-    public SuperObject[] objects;
+    public Entity[] objects;
+    private ArrayList<Entity> entityList = new ArrayList<>();
+
     public UI ui;
 
     public KeyHandler keyHandler;
     public CollisionChecker cChecker;
     public AssetSetter aSetter;
+    public EventHandler eHandler;
 
     // GAME STATE
     public int gameState;
@@ -72,7 +75,9 @@ public class GamePanel extends JPanel implements Runnable {
         //npc实例化
         npcs = new Entity[10];
         // objects实例化
-        objects = new SuperObject[10];
+        objects = new Entity[10];
+        // 事件处理器实例化
+        eHandler = new EventHandler(this);
     }
     public void setupGame(){
         // 将物品放置好
@@ -132,33 +137,41 @@ public class GamePanel extends JPanel implements Runnable {
         if(gameState == titleState){
             ui.draw(g2);
         }else {
-            long drawStart = 0;
-            drawStart = System.nanoTime();
+
             // 绘制地图
             tileManage.draw(g2);
-            // 绘制道具
-            for (SuperObject object : objects) {
-                if (object != null) {
-                    object.draw(g2, this);
+            // 绘制entity
+            entityList.add(player);
+            for(int i = 0; i < npcs.length;i ++){
+                if(npcs[i] != null){
+                    entityList.add(npcs[i]);
                 }
             }
-            // 绘制玩家
-            player.draw(g2);
-            //绘制npc
-            for (int i = 0; i < npcs.length; i++) {
-                if (npcs[i] != null) {
-                    npcs[i].draw(g2);
+            for(int i = 0; i < objects.length;i ++){
+                if(objects[i] != null){
+                    entityList.add(objects[i]);
                 }
             }
+            // 对渲染对象进行分类,按照纵坐标从上至下排序
+            Collections.sort(entityList, new Comparator<Entity>(){
+
+                @Override
+                public int compare(Entity e1, Entity e2){
+                    return Integer.compare(e1.worldY, e2.worldY);
+                }
+            });
+            // 绘制Entity
+            for(int i = 0; i < entityList.size(); i ++){
+                entityList.get(i).draw(g2);
+            }
+            // 移除entity，下次绘制时重新添加
+            for(int i = 0; i < entityList.size(); i ++){
+                entityList.remove(i);
+            }
+
             // UI绘制
             ui.draw(g2);
-            if (keyHandler.checkDrawTime) {
-                long drawEnd = System.nanoTime();
-                long passedTime = drawEnd - drawStart;
-                g2.setColor(Color.WHITE);
-                g2.drawString("Draw Time : " + passedTime, 10, 400);
-                System.out.println("Draw Time : " + passedTime);
-            }
+
         }
 
         g2.dispose();
