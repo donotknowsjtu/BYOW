@@ -3,6 +3,7 @@ package main;
 
 import entity.Entity;
 import entity.Player;
+import monster.MON_GreenSlime;
 import tile.TileManage;
 
 import javax.swing.*;
@@ -35,6 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player;
     public Entity[] npcs;
     public Entity[] objects;
+    public Entity[] monsters;
     private ArrayList<Entity> entityList = new ArrayList<>();
 
     public UI ui;
@@ -76,6 +78,8 @@ public class GamePanel extends JPanel implements Runnable {
         npcs = new Entity[10];
         // objects实例化
         objects = new Entity[10];
+        // monster实例化
+        monsters = new Entity[10];
         // 事件处理器实例化
         eHandler = new EventHandler(this);
     }
@@ -84,7 +88,8 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setObject();
         // 初始化npc
         aSetter.setNPC();
-
+        // 初始化Monster
+        aSetter.setMonster();
         gameState = titleState;
     }
 
@@ -119,9 +124,14 @@ public class GamePanel extends JPanel implements Runnable {
     private void update(){
         if(gameState == playState) {
             player.update();
-            for(Entity entity : npcs){
-                if(entity != null){
-                    entity.update();
+            for(Entity npc : npcs){
+                if(npc != null){
+                    npc.update();
+                }
+            }
+            for(Entity monster : monsters){
+                if(monster != null){
+                    monster.update();
                 }
             }
             tileManage.update();
@@ -152,6 +162,11 @@ public class GamePanel extends JPanel implements Runnable {
                     entityList.add(objects[i]);
                 }
             }
+            for(int i = 0; i < monsters.length;i ++){
+                if(monsters[i] != null){
+                    entityList.add(monsters[i]);
+                }
+            }
             // 对渲染对象进行分类,按照纵坐标从上至下排序
             Collections.sort(entityList, new Comparator<Entity>(){
 
@@ -165,9 +180,7 @@ public class GamePanel extends JPanel implements Runnable {
                 entityList.get(i).draw(g2);
             }
             // 移除entity，下次绘制时重新添加
-            for(int i = 0; i < entityList.size(); i ++){
-                entityList.remove(i);
-            }
+            entityList.clear();
 
             // UI绘制
             ui.draw(g2);

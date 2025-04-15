@@ -4,7 +4,6 @@ import main.GamePanel;
 import main.KeyHandler;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class Player extends Entity{
 
@@ -62,7 +61,7 @@ public class Player extends Entity{
 
     @Override
     public void update(){
-        if(gp.keyHandler.W_pressed || gp.keyHandler.D_pressed || gp.keyHandler.S_pressed || gp.keyHandler.A_pressed) {
+        if(gp.keyHandler.W_pressed || gp.keyHandler.D_pressed || gp.keyHandler.S_pressed || gp.keyHandler.A_pressed || gp.keyHandler.Enter_pressed) {
             if (gp.keyHandler.W_pressed) {
                 direction = Direction.UP;
                 image = getImage();
@@ -85,20 +84,24 @@ public class Player extends Entity{
             }
 
             collisionOn = true;
+            // 检测瓦片碰撞
             gp.cChecker.checkTile(this);
+            // 检测物品碰撞
             int objIndex = gp.cChecker.checkObject(this, true);
             pickUpObject(objIndex);
 
-            // check player and NPC collision
+            // 检查npc碰撞
             int npcIndex = gp.cChecker.checkEntity(this, gp.npcs);
             interactNpc(npcIndex);
-
-            // check event
+            // 检查怪物碰撞
+            int monsterIndex = gp.cChecker.checkEntity(this, gp.monsters);
+            contactMonster(monsterIndex);
+            // 检查事件触发
             gp.eHandler.checkEvent();
 
-            gp.keyHandler.Enter_pressed = false;
 
-            if (!collisionOn) {
+
+            if (!collisionOn && !gp.keyHandler.Enter_pressed) {
                 switch (direction) {
                     case Direction.UP:
                         worldY -= speed;
@@ -114,8 +117,18 @@ public class Player extends Entity{
                         break;
                 }
             }
+            gp.keyHandler.Enter_pressed = false;
+        }
+        if(invincible){
+            invincibleCounter ++;
+            if(invincibleCounter == 30){
+                invincibleCounter = 0;
+                invincible = false;
+            }
         }
     }
+
+
 
     private void interactNpc(int npcIndex) {
         if(npcIndex != 999){
@@ -124,7 +137,15 @@ public class Player extends Entity{
                 gp.npcs[npcIndex].speak();
             }
         }
+    }
 
+    private void contactMonster(int monsterIndex) {
+        if(monsterIndex != 999){
+            if(!invincible){
+                life -= 1;
+                invincible = true;
+            }
+        }
     }
 
     public void pickUpObject(int objIndex){
@@ -135,7 +156,14 @@ public class Player extends Entity{
     }
     @Override
     public void draw(Graphics2D g2){
+        if(invincible){
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
+
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
     }
 
 }

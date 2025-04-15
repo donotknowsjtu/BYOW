@@ -1,6 +1,7 @@
 package main;
 
 import entity.NPC_Soldier;
+import monster.MON_GreenSlime;
 import object.OBJ_Boots;
 import object.OBJ_Chest;
 import object.OBJ_Door;
@@ -33,4 +34,15 @@ public class AssetSetter {
         gp.npcs[0].worldY = gp.tileSize * 21;
 
     }
+
+    public void setMonster(){
+        gp.monsters[0] = new MON_GreenSlime(gp);
+        gp.monsters[0].worldX = gp.tileSize * 23;
+        gp.monsters[0].worldY = gp.tileSize * 22;
+
+        gp.monsters[1] = new MON_GreenSlime(gp);
+        gp.monsters[1].worldX = gp.tileSize * 23;
+        gp.monsters[1].worldY = gp.tileSize * 39;
+    }
+
 }

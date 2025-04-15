@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class NPC_Soldier extends Entity{
 
-    private Random random;
+
 
     public NPC_Soldier(GamePanel gp){
         super(gp);
@@ -21,7 +21,6 @@ public class NPC_Soldier extends Entity{
         this.solidArea = new Rectangle(8, 12, 32, 32);
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
-        this.random = new Random(1234);
         loadImage();
         this.image = getImage();
         setDialogue();
@@ -49,20 +48,7 @@ public class NPC_Soldier extends Entity{
 
     @Override
     public void setAction() {
-        actionLockCounter++;
-        if (actionLockCounter == 120) {
-            int i = random.nextInt(100) + 1;
-            if (i <= 25) {
-                direction = Direction.UP;
-            } else if (i <= 50) {
-                direction = Direction.DOWN;
-            } else if (i <= 75) {
-                direction = Direction.LEFT;
-            } else {
-                direction = Direction.RIGHT;
-            }
-            actionLockCounter = 0;
-        }
+        super.setAction();
     }
 
     public void setDialogue(){
