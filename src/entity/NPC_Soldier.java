@@ -2,12 +2,7 @@ package entity;
 
 import main.GamePanel;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
-import java.util.Random;
 
 public class NPC_Soldier extends Entity{
 
@@ -17,7 +12,7 @@ public class NPC_Soldier extends Entity{
         super(gp);
         this.speed = 1;
         this.direction = Direction.UP;
-        this.stepCount = 1;
+        this.spriteCounter = 1;
         this.solidArea = new Rectangle(8, 12, 32, 32);
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
@@ -27,22 +22,22 @@ public class NPC_Soldier extends Entity{
     }
 
     private void loadImage(){
-        up1 = setup("/NPC/soldier/_up1.png");
-        up2 = setup("/NPC/soldier/_up2.png");
-        up3 = setup("/NPC/soldier/_up3.png");
-        up4 = setup("/NPC/soldier/_up4.png");
-        down1 = setup("/NPC/soldier/_down1.png");
-        down2 = setup("/NPC/soldier/_down2.png");
-        down3 = setup("/NPC/soldier/_down3.png");
-        down4 = setup("/NPC/soldier/_down4.png");
-        left1 = setup("/NPC/soldier/_left1.png");
-        left2 = setup("/NPC/soldier/_left2.png");
-        left3 = setup("/NPC/soldier/_left3.png");
-        left4 = setup("/NPC/soldier/_left4.png");
-        right1 = setup("/NPC/soldier/_right1.png");
-        right2 = setup("/NPC/soldier/_right2.png");
-        right3 = setup("/NPC/soldier/_right3.png");
-        right4 = setup("/NPC/soldier/_right4.png");
+        up1 = setup("/NPC/soldier/_up1.png", gp.tileSize, gp.tileSize);
+        up2 = setup("/NPC/soldier/_up2.png", gp.tileSize, gp.tileSize);
+        up3 = setup("/NPC/soldier/_up3.png", gp.tileSize, gp.tileSize);
+        up4 = setup("/NPC/soldier/_up4.png", gp.tileSize, gp.tileSize);
+        down1 = setup("/NPC/soldier/_down1.png", gp.tileSize, gp.tileSize);
+        down2 = setup("/NPC/soldier/_down2.png", gp.tileSize, gp.tileSize);
+        down3 = setup("/NPC/soldier/_down3.png", gp.tileSize, gp.tileSize);
+        down4 = setup("/NPC/soldier/_down4.png", gp.tileSize, gp.tileSize);
+        left1 = setup("/NPC/soldier/_left1.png", gp.tileSize, gp.tileSize);
+        left2 = setup("/NPC/soldier/_left2.png", gp.tileSize, gp.tileSize);
+        left3 = setup("/NPC/soldier/_left3.png", gp.tileSize, gp.tileSize);
+        left4 = setup("/NPC/soldier/_left4.png", gp.tileSize, gp.tileSize);
+        right1 = setup("/NPC/soldier/_right1.png", gp.tileSize, gp.tileSize);
+        right2 = setup("/NPC/soldier/_right2.png", gp.tileSize, gp.tileSize);
+        right3 = setup("/NPC/soldier/_right3.png", gp.tileSize, gp.tileSize);
+        right4 = setup("/NPC/soldier/_right4.png", gp.tileSize, gp.tileSize);
 
     }
 

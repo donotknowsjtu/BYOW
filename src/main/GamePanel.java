@@ -64,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable {
         music = new Sound();
         se = new Sound();
         // 玩家实例化
-        this.player = new Player(this, keyHandler);
+        this.player = new Player(this);
 
         // 瓦片控制器实例化
         this.tileManage = new TileManage(this);

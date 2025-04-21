@@ -11,7 +11,7 @@ public class OBJ_Key extends Entity {
     public OBJ_Key(GamePanel gp){
         super(gp);
         this.name = "Key";
-        up1 = setup("/objects/key.png");
+        up1 = setup("/objects/key.png", gp.tileSize, gp.tileSize);
         collisionOn = true;
 
     }

@@ -16,26 +16,33 @@ public class Entity {
     public int speed;
     public BufferedImage image;
     public BufferedImage up1, up2, up3, up4, down1, down2, down3, down4, left1, left2, left3, left4, right1, right2, right3, right4;
+    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
     public int direction;
     public Rectangle solidArea;
+    public Rectangle attackArea;
     public int solidAreaDefaultX, solidAreaDefaultY;
-    public int stepCount;
-    public int actionLockCounter;
+
     public String dialogues[];
     public int dialogueIndex;
     public Random random;
     // 无敌效果和无敌时间
     // 针对slam和玩家触碰时，玩家会每隔1/60掉血一次，这个时间间隔太短，需要增加时间间隔，故引入无敌时间
     public boolean invincible;
+    public boolean attacking;
+    // Counter
     public int invincibleCounter;
+    public int spriteCounter;
+    public int spriteNum;
+    public int actionLockCounter;
+    // life
     public int maxLife;
     public int life;
-
 
     // Object
     public BufferedImage image1, image2, image3;
     public String name;
     public boolean collisionOn;
+
     // type用来区分player = 0， npc = 1， monster = 2
     public int type;
     public final int playerType = 0;
@@ -44,53 +51,63 @@ public class Entity {
 
     public Entity(GamePanel gp){
         this.gp = gp;
-        this.stepCount = 1;
+        this.spriteCounter = 1;
         actionLockCounter = 0;
         this.collisionOn = true;
         this.dialogues = new String[10];
         this.dialogueIndex = 0;
         this.direction = Direction.UP;
         this.solidArea = new Rectangle();
+        this.attackArea = new Rectangle(0, 0, 0, 0);
         this.random = new Random(1234);
         this.invincible = false;
         this.invincibleCounter = 0;
+        this.spriteCounter = 0;
+        this.spriteNum = 1;
+        this.attacking = false;
     }
+    // 这个方法是npc专用
     public void draw(Graphics2D g2){
         int screenX = this.worldX - gp.player.worldX + gp.player.screenX;
         int screenY = this.worldY - gp.player.worldY + gp.player.screenY;
 
-        if(direction == Direction.UP && stepCount == 1){
+        if(direction == Direction.UP && spriteCounter == 1){
             image = up1;
-        }else if(direction == Direction.UP && stepCount == 2){
+        }else if(direction == Direction.UP && spriteCounter == 2){
             image = up2;
-        }else if(direction == Direction.UP && stepCount == 3){
+        }else if(direction == Direction.UP && spriteCounter == 3){
             image = up3;
-        }else if(direction == Direction.UP && stepCount == 4){
+        }else if(direction == Direction.UP && spriteCounter == 4){
             image = up4;
-        }else if(direction == Direction.DOWN && stepCount == 1){
+        }else if(direction == Direction.DOWN && spriteCounter == 1){
             image = down1;
-        }else if(direction == Direction.DOWN && stepCount == 2){
+        }else if(direction == Direction.DOWN && spriteCounter == 2){
             image = down2;
-        }else if(direction == Direction.DOWN && stepCount == 3){
+        }else if(direction == Direction.DOWN && spriteCounter == 3){
             image = down3;
-        }else if(direction == Direction.DOWN && stepCount == 4){
+        }else if(direction == Direction.DOWN && spriteCounter == 4){
             image = down4;
-        } else if(direction == Direction.LEFT && stepCount == 1){
+        } else if(direction == Direction.LEFT && spriteCounter == 1){
             image = left1;
-        }else if(direction == Direction.LEFT && stepCount == 2){
+        }else if(direction == Direction.LEFT && spriteCounter == 2){
             image = left3;
-        }else if(direction == Direction.LEFT && stepCount == 3){
+        }else if(direction == Direction.LEFT && spriteCounter == 3){
             image = left3;
-        }else if(direction == Direction.LEFT && stepCount == 4){
+        }else if(direction == Direction.LEFT && spriteCounter == 4){
             image = left4;
-        }else if(direction == Direction.RIGHT && stepCount == 1){
+        }else if(direction == Direction.RIGHT && spriteCounter == 1){
             image = right1;
-        }else if(direction == Direction.RIGHT && stepCount == 2){
+        }else if(direction == Direction.RIGHT && spriteCounter == 2){
             image = right3;
-        }else if(direction == Direction.RIGHT && stepCount == 3){
+        }else if(direction == Direction.RIGHT && spriteCounter == 3){
             image = right3;
-        }else if(direction == Direction.RIGHT && stepCount == 4){
+        }else if(direction == Direction.RIGHT && spriteCounter == 4){
             image = right4;
+        }
+
+        // 被攻击，画笔改为半透明
+        if(invincible){
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
         }
 
         if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
@@ -101,52 +118,55 @@ public class Entity {
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
         }
+
+        // 恢复原画笔
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 
-    public BufferedImage setup(String imagePath){
+    public BufferedImage setup(String imagePath, int width, int length){
         UtilityTool uTool = new UtilityTool();
         BufferedImage scaledImage = null;
         try {
             scaledImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
-            scaledImage = uTool.scaleImage(scaledImage, gp.tileSize, gp.tileSize);
+            scaledImage = uTool.scaleImage(scaledImage, width, length);
         } catch (IOException e){
             e.printStackTrace();
         }
         return scaledImage;
     }
-
+    // 这个方法npc专用
     public BufferedImage getImage(){
-        if(direction == Direction.UP && stepCount == 1){
+        if(direction == Direction.UP && spriteCounter == 1){
             image = up1;
-        }else if(direction == Direction.UP && stepCount == 2){
+        }else if(direction == Direction.UP && spriteCounter == 2){
             image = up2;
-        }else if(direction == Direction.UP && stepCount == 3){
+        }else if(direction == Direction.UP && spriteCounter == 3){
             image = up3;
-        }else if(direction == Direction.UP && stepCount == 4){
+        }else if(direction == Direction.UP && spriteCounter == 4){
             image = up4;
-        }else if(direction == Direction.DOWN && stepCount == 1){
+        }else if(direction == Direction.DOWN && spriteCounter == 1){
             image = down1;
-        }else if(direction == Direction.DOWN && stepCount == 2){
+        }else if(direction == Direction.DOWN && spriteCounter == 2){
             image = down2;
-        }else if(direction == Direction.DOWN && stepCount == 3){
+        }else if(direction == Direction.DOWN && spriteCounter == 3){
             image = down3;
-        }else if(direction == Direction.DOWN && stepCount == 4){
+        }else if(direction == Direction.DOWN && spriteCounter == 4){
             image = down4;
-        } else if(direction == Direction.LEFT && stepCount == 1){
+        } else if(direction == Direction.LEFT && spriteCounter == 1){
             image = left1;
-        }else if(direction == Direction.LEFT && stepCount == 2){
+        }else if(direction == Direction.LEFT && spriteCounter == 2){
             image = left3;
-        }else if(direction == Direction.LEFT && stepCount == 3){
+        }else if(direction == Direction.LEFT && spriteCounter == 3){
             image = left3;
-        }else if(direction == Direction.LEFT && stepCount == 4){
+        }else if(direction == Direction.LEFT && spriteCounter == 4){
             image = left4;
-        }else if(direction == Direction.RIGHT && stepCount == 1){
+        }else if(direction == Direction.RIGHT && spriteCounter == 1){
             image = right1;
-        }else if(direction == Direction.RIGHT && stepCount == 2){
+        }else if(direction == Direction.RIGHT && spriteCounter == 2){
             image = right3;
-        }else if(direction == Direction.RIGHT && stepCount == 3){
+        }else if(direction == Direction.RIGHT && spriteCounter == 3){
             image = right3;
-        }else if(direction == Direction.RIGHT && stepCount == 4){
+        }else if(direction == Direction.RIGHT && spriteCounter == 4){
             image = right4;
         }
         return image;
@@ -205,13 +225,20 @@ public class Entity {
                         worldX += speed;
                         stepCount();
                         break;
-                }
             }
+        }
+        if(invincible){
+            invincibleCounter ++;
+            if(invincibleCounter == 30){
+                invincibleCounter = 0;
+                invincible = false;
+            }
+        }
     }
     public void stepCount(){
-        stepCount++;
-        if (stepCount == 5) {
-            stepCount = 1;
+        spriteCounter++;
+        if (spriteCounter == 5) {
+            spriteCounter = 1;
         }
     }
     public void speak(){
