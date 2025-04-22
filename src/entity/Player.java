@@ -2,6 +2,8 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import object.OBJ_Shield_Wood;
+import object.OBJ_Sword_Normal;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,11 +13,11 @@ public class Player extends Entity{
     public int screenX , screenY ;
     public int worldCol, worldRow, screenCol, screenRow;
     private int tempScreenX, tempScreenY;
+    public boolean attackCanceled;
+
     public Player(GamePanel gp){
         super(gp);
-        this.speed = 4;
-        this.worldX = 22 * gp.tileSize;
-        this.worldY = 22 * gp.tileSize;
+
         this.screenX = (gp.screenLength - gp.tileSize) / 2;
         this.screenY = (gp.screenWidth - gp.tileSize) / 2;
         this.worldCol = this.worldX / gp.tileSize;
@@ -36,15 +38,39 @@ public class Player extends Entity{
         loadPlayerAttackImage();
         this.image = getImage();
 
-        // LIFE VALUE
-        this.maxLife = 6;
-        life = maxLife;
-
         this.tempScreenX = screenX;
         this.tempScreenY = screenY;
 
+        this.attackCanceled = false;
+        setDefaultValues();
     }
+    // default value
+    private void setDefaultValues(){
+        this.speed = 4;
+        this.worldX = 22 * gp.tileSize;
+        this.worldY = 22 * gp.tileSize;
+        // LIFE VALUE
+        this.maxLife = 6;
+        life = maxLife;
+        // Player state
+        level = 1;
+        strength = 1;
+        dexterity = 1;
+        exp = 0;
+        nextLevelExp = 5;
+        coin = 0;
+        currentWeapon = new OBJ_Sword_Normal(gp);
+        currentShield = new OBJ_Shield_Wood(gp);
+        attack = getAttack();
+        defense = getDefense();
 
+    }
+    private int getAttack(){
+        return attack = strength * currentWeapon.attackValue;
+    }
+    private int getDefense(){
+        return defense = dexterity * currentShield.defenseValue;
+    }
     private void loadImage(){
         up1 = setup("/player/_up1.png", gp.tileSize, gp.tileSize);
         up2 = setup("/player/_up2.png", gp.tileSize, gp.tileSize);
@@ -106,7 +132,12 @@ public class Player extends Entity{
             if (gp.keyHandler.Enter_pressed){
 
             }
-
+            if(gp.keyHandler.Enter_pressed && !attackCanceled){
+                gp.playSE(5);
+                attacking = true;
+                spriteCounter = 0;
+            }
+            attackCanceled = false;
             collisionOn = true;
             // 检测瓦片碰撞
             gp.cChecker.checkTile(this);
@@ -189,7 +220,9 @@ public class Player extends Entity{
         if(monsterIndex != 999){
            if(!gp.monsters[monsterIndex].invincible){
                gp.playSE(5);
-               gp.monsters[monsterIndex].life -= 1;
+               int damage = attack - gp.monsters[monsterIndex].defense;
+               if(damage < 0){damage = 0;}
+               gp.monsters[monsterIndex].life -= damage;
                gp.monsters[monsterIndex].invincible = true;
                gp.monsters[monsterIndex].damageReaction();
                if(gp.monsters[monsterIndex].life <= 0){
@@ -202,13 +235,10 @@ public class Player extends Entity{
 
     private void interactNpc(int npcIndex) {
         if(gp.keyHandler.Enter_pressed){
-            if(npcIndex != 999){
+            if(npcIndex != 999) {
+                attackCanceled = true;
                 gp.gameState = gp.dialogueState;
                 gp.npcs[npcIndex].speak();
-            }else {
-                gp.playSE(6);
-                attacking = true;
-
             }
         }
     }
@@ -217,7 +247,9 @@ public class Player extends Entity{
         if(monsterIndex != 999){
             if(!invincible){
                 gp.playSE(6);
-                life -= 1;
+                int damage = gp.monsters[monsterIndex].attack - this.defense;
+                if(damage < 0){damage = 0;}
+                life -= damage;
                 invincible = true;
             }
         }

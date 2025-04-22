@@ -43,6 +43,17 @@ public class Entity {
     // life
     public int maxLife;
     public int life;
+    // Character attributes
+    public int level;
+    public int strength;
+    public int dexterity;
+    public int attack;
+    public int defense;
+    public int exp;
+    public int nextLevelExp;
+    public int coin;
+    public Entity currentWeapon;
+    public Entity currentShield;
 
     // Object
     public BufferedImage image1, image2, image3;
@@ -55,6 +66,9 @@ public class Entity {
     public final int npcType = 1;
     public final int monsterType = 2;
 
+    // Item attributes
+    public int attackValue;
+    public int defenseValue;
 
     public Entity(GamePanel gp){
         this.gp = gp;
@@ -259,7 +273,9 @@ public class Entity {
         if(this.type == 2 && contactPlayer){
             if(!gp.player.invincible){
                 gp.playSE(6);
-                gp.player.life -= 1;
+                int damage = this.attack - gp.player.defense;
+                if(damage < 0){damage = 0;}
+                life -= damage;
                 gp.player.invincible = true;
             }
         }

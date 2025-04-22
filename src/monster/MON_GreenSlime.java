@@ -21,6 +21,7 @@ public class MON_GreenSlime extends Entity {
         solidAreaDefaultY = solidArea.y;
         loadImage();
         type = monsterType;
+        this.attack = 5;
     }
 
 
