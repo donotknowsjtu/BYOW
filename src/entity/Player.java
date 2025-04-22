@@ -188,10 +188,12 @@ public class Player extends Entity{
     private void damageMonster(int monsterIndex) {
         if(monsterIndex != 999){
            if(!gp.monsters[monsterIndex].invincible){
+               gp.playSE(5);
                gp.monsters[monsterIndex].life -= 1;
                gp.monsters[monsterIndex].invincible = true;
+               gp.monsters[monsterIndex].damageReaction();
                if(gp.monsters[monsterIndex].life <= 0){
-                   gp.monsters[monsterIndex] = null;
+                   gp.monsters[monsterIndex].dying = true;
                }
            }
         }
@@ -204,6 +206,7 @@ public class Player extends Entity{
                 gp.gameState = gp.dialogueState;
                 gp.npcs[npcIndex].speak();
             }else {
+                gp.playSE(6);
                 attacking = true;
 
             }
@@ -213,6 +216,7 @@ public class Player extends Entity{
     private void contactMonster(int monsterIndex) {
         if(monsterIndex != 999){
             if(!invincible){
+                gp.playSE(6);
                 life -= 1;
                 invincible = true;
             }

@@ -46,4 +46,10 @@ public class MON_GreenSlime extends Entity {
     public void setAction(){
         super.setAction();
     }
+
+    public void damageReaction(){
+        actionLockCounter = 0;
+        direction = gp.player.direction;
+        this.speed = 4;
+    }
 }

@@ -25,15 +25,21 @@ public class Entity {
     public String dialogues[];
     public int dialogueIndex;
     public Random random;
-    // 无敌效果和无敌时间
-    // 针对slam和玩家触碰时，玩家会每隔1/60掉血一次，这个时间间隔太短，需要增加时间间隔，故引入无敌时间
+    // STATE
+        // 无敌效果和无敌时间
+        // 针对slam和玩家触碰时，玩家会每隔1/60掉血一次，这个时间间隔太短，需要增加时间间隔，故引入无敌时间
     public boolean invincible;
     public boolean attacking;
+    public boolean alive;
+    public boolean dying;
+    public boolean hpBarOn;
     // Counter
     public int invincibleCounter;
     public int spriteCounter;
     public int spriteNum;
     public int actionLockCounter;
+    public int dyingCounter;
+    public int hpBarCounter;
     // life
     public int maxLife;
     public int life;
@@ -48,6 +54,7 @@ public class Entity {
     public final int playerType = 0;
     public final int npcType = 1;
     public final int monsterType = 2;
+
 
     public Entity(GamePanel gp){
         this.gp = gp;
@@ -65,6 +72,11 @@ public class Entity {
         this.spriteCounter = 0;
         this.spriteNum = 1;
         this.attacking = false;
+        this.alive = true;
+        this.dying = false;
+        this.dyingCounter = 0;
+        this.hpBarOn = false;
+        this.hpBarCounter = 0;
     }
     // 这个方法是npc专用
     public void draw(Graphics2D g2){
@@ -105,9 +117,30 @@ public class Entity {
             image = right4;
         }
 
+        // Monster HP bar
+        if(type == 2 && hpBarOn) {
+            double oneScale = (double) gp.tileSize / maxLife;
+            double hpBarValue = oneScale * life;
+
+            g2.setColor(new Color(35, 35, 35));
+            g2.fillRect(screenX - 1, screenY - 16,gp.tileSize + 2, 12);
+            g2.setColor(new Color(255, 0, 30));
+            g2.fillRect(screenX, screenY - 15, (int) hpBarValue, 10);
+
+            hpBarCounter ++;
+            if(hpBarCounter >= 600){
+                hpBarCounter = 0;
+                hpBarOn = false;
+            }
+        }
         // 被攻击，画笔改为半透明
         if(invincible){
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+            hpBarOn = true;
+            changeAlpha(g2, 0.3f);
+        }
+
+        if(dying){
+            dyingAnimation(g2);
         }
 
         if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
@@ -120,9 +153,31 @@ public class Entity {
         }
 
         // 恢复原画笔
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        changeAlpha(g2, 1f);
     }
 
+    private void dyingAnimation(Graphics2D g2) {
+        dyingCounter++;
+        int i = 5;
+        if(dyingCounter <= i){changeAlpha(g2, 0f);}
+        else if (dyingCounter <= i * 2) {changeAlpha(g2, 1f);}
+        else if (dyingCounter <= i * 3) {changeAlpha(g2, 0f);}
+        else if (dyingCounter <= i * 4) {changeAlpha(g2, 1f);}
+        else if (dyingCounter <= i * 5) {changeAlpha(g2, 0f);}
+        else if (dyingCounter <= i * 6) {changeAlpha(g2, 1f);}
+        else if (dyingCounter <= i * 7) {changeAlpha(g2, 0f);}
+        else if (dyingCounter <= i * 8) {changeAlpha(g2, 1f);}
+        else if (dyingCounter <= i * 9) {changeAlpha(g2, 0f);}
+        else{
+            dying = false;
+            alive = false;
+            dyingCounter = 0;
+        }
+    }
+    public void changeAlpha(Graphics2D g2, float alphaValue){
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
+
+    }
     public BufferedImage setup(String imagePath, int width, int length){
         UtilityTool uTool = new UtilityTool();
         BufferedImage scaledImage = null;
@@ -203,6 +258,7 @@ public class Entity {
         // 对于monster触发contact player事件进行处理
         if(this.type == 2 && contactPlayer){
             if(!gp.player.invincible){
+                gp.playSE(6);
                 gp.player.life -= 1;
                 gp.player.invincible = true;
             }
@@ -253,5 +309,8 @@ public class Entity {
             case Direction.LEFT: direction = Direction.RIGHT;break;
             case Direction.RIGHT: direction = Direction.LEFT;break;
         }
+    }
+    public void damageReaction(){
+
     }
 }
