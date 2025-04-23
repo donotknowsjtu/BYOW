@@ -30,14 +30,14 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
         if(gp.gameState == gp.titleState){titleState(code);}
-        else if(gp.gameState == gp.playState) {playState(code);}
+        else if(gp.gameState == gp.playState) {playState(code, e);}
         else if (gp.gameState == gp.pauseState) {pauseState(code);}
         else if (gp.gameState == gp.dialogueState) {dialogueState(code);}
     }
 
     private void titleState(int code){
         if(gp.ui.titleScreenState == 0) {
-            if (code == KeyEvent.VK_W) {
+            if (code == KeyEvent.VK_W ) {
                 gp.ui.commandNum--;
                 if (gp.ui.commandNum < 0) {
                     gp.ui.commandNum = 2;
@@ -47,7 +47,7 @@ public class KeyHandler implements KeyListener {
                 if (gp.ui.commandNum > 2) {
                     gp.ui.commandNum = 0;
                 }
-            } else if (code == KeyEvent.VK_ENTER) {
+            } else if (code == KeyEvent.VK_ENTER ) {
                 if (gp.ui.commandNum == 0) {
                     gp.ui. titleScreenState = 1;
                     gp.playMusic(0);
@@ -56,6 +56,7 @@ public class KeyHandler implements KeyListener {
                 } else if (gp.ui.commandNum == 2) {
                     System.exit(0);
                 }
+
 
             }
         } else if(gp.ui.titleScreenState == 1)  {
@@ -69,7 +70,7 @@ public class KeyHandler implements KeyListener {
                 if (gp.ui.commandNum > 3) {
                     gp.ui.commandNum = 0;
                 }
-            } else if (code == KeyEvent.VK_ENTER) {
+            } else if (code == KeyEvent.VK_ENTER ) {
                 if (gp.ui.commandNum == 0) {
                     gp.gameState = gp.playState;
                 } else if (gp.ui.commandNum == 1) {
@@ -87,7 +88,7 @@ public class KeyHandler implements KeyListener {
             }
         }
     }
-    private void playState(int code){
+    private void playState(int code, KeyEvent e){
         if (code == KeyEvent.VK_W) {
             W_pressed = true;
         }
@@ -117,6 +118,11 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_SLASH){
             reloadMap = true;
         }
+        if(code == KeyEvent.VK_CAPS_LOCK){
+            gp.ui.showInventoryUI = !gp.ui.showInventoryUI;
+
+        }
+
     }
     private void pauseState(int code){
         if(code == KeyEvent.VK_P){

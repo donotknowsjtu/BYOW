@@ -24,6 +24,13 @@ public class UI {
     public int titleScreenState = 0;
     private BufferedImage heart_full, heart_half, heart_blank;
     public boolean showCharacterUI;
+    public boolean showInventoryUI;
+    public int slotCol = 0;
+    public int slotRow = 0;
+    public ArrayList<ClickObj> toBeClickedObj;
+
+    public int clickedNum;
+    public boolean buttonClicked;
 
     public UI(GamePanel gp){
         this.gp = gp;
@@ -46,7 +53,10 @@ public class UI {
         currentDialogue = "";
         commandNum = 0;
         showCharacterUI = false;
+        showInventoryUI = false;
+        toBeClickedObj = new ArrayList<>();
 
+        buttonClicked = false;
     }
     public void addMessage(String text){
       message.add(text);
@@ -77,6 +87,35 @@ public class UI {
         if(gp.keyHandler.debugMode){
             drawDebugScreen();
         }
+        if(showInventoryUI){
+            drawInventoryScreen();
+        }
+    }
+
+    private void drawInventoryScreen() {
+        int frameX = gp.tileSize * 9;
+        int frameY = gp.tileSize;
+        int frameWidth = gp.tileSize * 6;
+        int frameHeight = gp.tileSize * 5;
+
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        // slot
+        final int slotXstart = frameX + 20;
+        final int slotYstart = frameY + 20;
+        int slotX = slotYstart;
+        int slotY = slotYstart;
+
+        // CURSOR
+        int cursorX = slotXstart + gp.tileSize * slotCol;
+        int cursorY = slotYstart + gp.tileSize * slotRow;
+        int cursorWidth = gp.tileSize;
+        int cursorHeight = gp.tileSize;
+
+        g2.setColor(Color.white);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+
     }
 
     private void drawDebugScreen() {
@@ -228,7 +267,11 @@ public class UI {
     }
 
     private void drawTitleScreen() {
+        int touchedNum = detectObjTouched();
+        clickedNum = detectObjClicked();
         if(titleScreenState == 0) {
+            toBeClickedObj.clear();
+
             g2.setColor(new Color(70, 120, 80));
             g2.fillRect(0, 0, gp.screenLength, gp.screenWidth);
             g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
@@ -251,25 +294,45 @@ public class UI {
             text = "NEW GAME";
             x = getXforCenterdText(text);
             y += gp.tileSize * 4;
-            g2.drawString(text, x, y);
-            if (commandNum == 0) {
+            drawTextWithRoundedRect(text, x, y, 20, 10);
+            if (commandNum == 0 || touchedNum == 0 || clickedNum == 0) {
                 g2.drawString(">", x - gp.tileSize, y);
+                if(touchedNum == 0){
+                    commandNum = touchedNum;
+                }
+                if(clickedNum == 0){
+                    commandNum = clickedNum;
+                }
             }
             text = "LOAD GAME";
             x = getXforCenterdText(text);
             y += gp.tileSize * 3 / 2;
-            g2.drawString(text, x, y);
-            if (commandNum == 1) {
+            drawTextWithRoundedRect(text, x, y, 20, 10);
+            if (commandNum == 1 || touchedNum == 1 || clickedNum == 1) {
                 g2.drawString(">", x - gp.tileSize, y);
+                if(touchedNum == 1){
+                    commandNum = touchedNum;
+                }
+                if(clickedNum == 1){
+                    commandNum = clickedNum;
+                }
             }
             text = "QUIT";
             x = getXforCenterdText(text);
             y += gp.tileSize * 3 / 2;
-            g2.drawString(text, x, y);
-            if (commandNum == 2) {
+            drawTextWithRoundedRect(text, x, y, 20, 10);
+            if (commandNum == 2 || touchedNum == 2 || clickedNum == 2) {
                 g2.drawString(">", x - gp.tileSize, y);
+                if(touchedNum == 2){
+                    commandNum = touchedNum;
+                }
+                if(clickedNum == 2){
+                    commandNum = clickedNum;
+                }
             }
         } else if (titleScreenState == 1) {
+            toBeClickedObj.clear();
+
             g2.setColor(new Color(70, 120, 80));
             g2.fillRect(0, 0, gp.screenLength, gp.screenWidth);
 
@@ -278,39 +341,84 @@ public class UI {
             String text = "Select your class!";
             int x = getXforCenterdText(text);
             int y = gp.tileSize * 3;
-            g2.drawString(text, x, y);
+            drawTextWithRoundedRect(text, x, y, 20, 10);
+
 
             text = "Fighter";
             x = getXforCenterdText(text);
             y += gp.tileSize * 3;
-            g2.drawString(text, x, y);
-            if(commandNum == 0){
+            drawTextWithRoundedRect(text, x, y, 20, 10);
+            if(commandNum == 0 || touchedNum == 0 || clickedNum == 0){
                 g2.drawString(">", x - gp.tileSize, y);
+                if(touchedNum == 0){
+                    commandNum = touchedNum;
+                }
+                if(clickedNum == 0){
+                    commandNum = clickedNum;
+                }
             }
             text = "Thief";
             x = getXforCenterdText(text);
             y += gp.tileSize ;
-            g2.drawString(text, x, y);
-            if(commandNum == 1){
+            drawTextWithRoundedRect(text, x, y, 20, 10);
+
+            if(commandNum == 1 || touchedNum == 1 || clickedNum == 1){
                 g2.drawString(">", x - gp.tileSize, y);
+                if(touchedNum == 1){
+                    commandNum = touchedNum;
+                }
+                if(clickedNum == 1){
+                    commandNum = clickedNum;
+                }
             }
             text = "Sorcerer";
             x = getXforCenterdText(text);
             y += gp.tileSize ;
-            g2.drawString(text, x, y);
-            if(commandNum == 2){
+            drawTextWithRoundedRect(text, x, y, 20, 10);
+
+            if(commandNum == 2 || touchedNum == 2 || clickedNum == 2){
                 g2.drawString(">", x - gp.tileSize, y);
+                if(touchedNum == 2){
+                    commandNum = touchedNum;
+                }
+                if(clickedNum == 2){
+                    commandNum = clickedNum;
+                }
             }
             text = "back";
             x = getXforCenterdText(text);
             y += gp.tileSize * 2 ;
-            g2.drawString(text, x, y);
-            if(commandNum == 3){
+            drawTextWithRoundedRect(text, x, y, 20, 10);
+
+            if(commandNum == 3 || touchedNum == 3 || clickedNum == 3){
                 g2.drawString(">", x - gp.tileSize, y);
+                if(touchedNum == 3){
+                    commandNum = touchedNum;
+                }
+                if(clickedNum == 3){
+                    commandNum = clickedNum;
+                }
             }
         }
     }
-
+    private int detectObjTouched(){
+        int i = -1;
+        for(int j = 0; j < toBeClickedObj.size(); j ++){
+            if(toBeClickedObj.get(j).touched){
+                i = j;
+            }
+        }
+        return i;
+    }
+    private int detectObjClicked(){
+        int i = -1;
+        for(int j = 0; j < toBeClickedObj.size(); j ++){
+            if(toBeClickedObj.get(j).touched){
+                i = j;
+            }
+        }
+        return i;
+    }
     private void drawDialogueScreen() {
         // WINDOW
         int x = gp.tileSize * 2, y = gp.tileSize / 2, length = gp.screenLength - gp.tileSize * 4, width = gp.tileSize * 4;
@@ -353,7 +461,31 @@ public class UI {
         int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         return tailX - length;
     }
+    private void drawTextWithRoundedRect(String text, int x, int y, int paddingX, int paddingY) {
+        // Calculate text dimensions
+        int textWidth = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        int textHeight = (int) g2.getFontMetrics().getStringBounds(text, g2).getHeight();
 
+        // Calculate rectangle dimensions
+        int rectX = x - paddingX;
+        int rectY = y - textHeight - paddingY;
+        int rectWidth = textWidth + paddingX * 2;
+        int rectHeight = textHeight + paddingY * 2;
+
+        // Draw rounded rectangle
+        g2.setColor(new Color(0, 0, 0, 150));
+        g2.fillRoundRect(rectX, rectY, rectWidth, rectHeight, 25, 25);
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(rectX, rectY, rectWidth, rectHeight, 25, 25);
+
+        // Draw text
+        g2.drawString(text, x, y);
+
+        // Create and add ClickObj // 可优化
+        ClickObj clickObj = new ClickObj(rectX, rectY, rectWidth, rectHeight);
+        toBeClickedObj.add(clickObj);
+    }
 
 
 

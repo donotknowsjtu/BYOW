@@ -8,9 +8,12 @@ import tile.TileManage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.im.InputContext;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -42,6 +45,8 @@ public class GamePanel extends JPanel implements Runnable {
     public UI ui;
 
     public KeyHandler keyHandler;
+    public MouseHandler mouseHandler;
+    public Point mousePoint;
     public CollisionChecker cChecker;
     public AssetSetter aSetter;
     public EventHandler eHandler;
@@ -56,11 +61,22 @@ public class GamePanel extends JPanel implements Runnable {
     public final int dialogueState = 3;
 
 
+
     public GamePanel(){
+
         this.setSize(screenLength, screenWidth);
+
         // 添加键盘监听器
         keyHandler = new KeyHandler(this);
         this.addKeyListener(keyHandler);
+        // 添加鼠标监听器
+        mouseHandler = new MouseHandler(this);
+        this.addMouseListener(mouseHandler);
+        this.addMouseMotionListener(mouseHandler);
+        this.setCursor(mouseHandler.createInvisibleCursor());
+        mousePoint = new Point(0, 0);
+
+
         this.setFocusable(true);
         // 音频实例化
         music = new Sound();
@@ -150,6 +166,7 @@ public class GamePanel extends JPanel implements Runnable {
         } else if (gameState == pauseState) {
             
         }
+
     }
 
     public void paintComponent(Graphics g){
@@ -158,6 +175,7 @@ public class GamePanel extends JPanel implements Runnable {
         // 绘制开始界面
         if(gameState == titleState){
             ui.draw(g2);
+            mouseHandler.draw(g2);
         }else {
 
             // 绘制地图
@@ -197,6 +215,8 @@ public class GamePanel extends JPanel implements Runnable {
             // UI绘制
             ui.draw(g2);
 
+            // 鼠标绘制
+            mouseHandler.draw(g2);
         }
 
         g2.dispose();
