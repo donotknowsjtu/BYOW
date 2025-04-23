@@ -112,6 +112,10 @@ public class TileManage {
     }
 
     public void update() {
+        if(gp.keyHandler.reloadMap){
+            loadMap("/Map/map01.txt");
+
+        }
         this.drawMinCol = (gp.player.worldX - gp.screenLength / 2 - gp.tileSize * 4) / gp.tileSize;
         this.drawMaxCol = (gp.player.worldX + gp.screenLength / 2 + gp.tileSize * 4) / gp.tileSize;
         this.drawMinRow = (gp.player.worldY - gp.screenWidth / 2 - gp.tileSize * 3) / gp.tileSize;

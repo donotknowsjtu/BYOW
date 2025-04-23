@@ -55,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int pauseState = 2;
     public final int dialogueState = 3;
 
+
     public GamePanel(){
         this.setSize(screenLength, screenWidth);
         // 添加键盘监听器
@@ -136,12 +137,16 @@ public class GamePanel extends JPanel implements Runnable {
                         monsters[i].update();
                     }
                     if(!monsters[i].alive){
-                        monsters[i] = null;
+                        // npc 死亡
+//                        monsters[i] = null;
+                        monsters[i].alive = true;
+                        monsters[i].life = monsters[i].maxLife;
                     }
                 }
             }
 
             tileManage.update();
+
         } else if (gameState == pauseState) {
             
         }

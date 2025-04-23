@@ -12,6 +12,7 @@ public class MON_GreenSlime extends Entity {
         speed = 1;
         maxLife = 4;
         life = maxLife;
+        exp = 2;
 
         solidArea.x = 3;
         solidArea.y = 18;

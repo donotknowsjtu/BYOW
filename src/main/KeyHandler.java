@@ -12,11 +12,14 @@ import static java.awt.event.KeyEvent.VK_C;
 
 public class KeyHandler implements KeyListener {
     public boolean W_pressed, S_pressed, A_pressed, D_pressed, Enter_pressed;
-    public boolean checkDrawTime = false;
+    public boolean debugMode;
+    public boolean reloadMap;
     private GamePanel gp;
     public KeyHandler(GamePanel gp){
         this.gp = gp;
         this.Enter_pressed = false;
+        this.debugMode = false;
+        this.reloadMap = false;
     }
     @Override
     public void keyTyped(KeyEvent e) {
@@ -106,15 +109,29 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_ENTER){
             Enter_pressed = true;
         }
+        // debug mode使用反斜杠\调用
+        if(code == KeyEvent.VK_BACK_SLASH){
+            debugMode = !debugMode;
+        }
+        // reloadMap使用正斜杠/调用
+        if(code == KeyEvent.VK_SLASH){
+            reloadMap = true;
+        }
     }
     private void pauseState(int code){
         if(code == KeyEvent.VK_P){
             gp.gameState = gp.playState;
         }
+        if(code == VK_C){
+            gp.ui.showCharacterUI = !gp.ui.showCharacterUI;
+        }
     }
     private void dialogueState(int code){
         if(code == KeyEvent.VK_ENTER){
             gp.gameState = gp.playState;
+        }
+        if(code == VK_C){
+            gp.ui.showCharacterUI = !gp.ui.showCharacterUI;
         }
     }
 
@@ -134,6 +151,8 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_D){
             D_pressed = false;
         }
-
+        if(code == KeyEvent.VK_SLASH){
+            reloadMap = false;
+        }
     }
 }

@@ -182,6 +182,8 @@ public class Player extends Entity{
             }
         }
         image = getImage();
+        worldCol = this.worldX / gp.tileSize;
+        worldRow = this.worldY / gp.tileSize;
     }
 
     private void attacking() {
@@ -223,15 +225,34 @@ public class Player extends Entity{
                int damage = attack - gp.monsters[monsterIndex].defense;
                if(damage < 0){damage = 0;}
                gp.monsters[monsterIndex].life -= damage;
+               gp.ui.addMessage(damage + "damage!");
                gp.monsters[monsterIndex].invincible = true;
                gp.monsters[monsterIndex].damageReaction();
                if(gp.monsters[monsterIndex].life <= 0){
                    gp.monsters[monsterIndex].dying = true;
+                   gp.ui.addMessage("Killed the " + gp.monsters[monsterIndex].name + "!");
+                   gp.ui.addMessage("EXP + " + gp.monsters[monsterIndex].exp + "!");
+                   exp += gp.monsters[monsterIndex].exp;
+                   checkLevelUp();
                }
            }
         }
     }
 
+    private void checkLevelUp(){
+        if(exp >= nextLevelExp){
+            level ++;
+            nextLevelExp = nextLevelExp * 2;
+            maxLife += 2;
+            strength ++;
+            dexterity ++;
+            attack = getAttack();
+            defense = getDefense();
+            gp.playSE(7);
+            gp.gameState = gp.dialogueState;
+            gp.ui.currentDialogue = "your are level " + level + "now!\n" + "you feel stronger";
+        }
+    }
 
     private void interactNpc(int npcIndex) {
         if(gp.keyHandler.Enter_pressed){
