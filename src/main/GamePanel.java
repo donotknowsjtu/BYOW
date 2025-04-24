@@ -33,8 +33,8 @@ public class GamePanel extends JPanel implements Runnable {
     private final double drawInterval  = 1000000000 / FPS;
     private double remainingTime;
 
-    private Sound music;
-    private Sound se;
+    private Sound music; // 背景音乐
+    private Sound se; // 音效
     public TileManage tileManage;
     public Player player;
     public Entity[] npcs;
@@ -113,7 +113,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void startGameThread(){
         gameThread = new Thread(this);
-        gameThread.run();
+        gameThread.start();
 
     }
 
@@ -140,6 +140,14 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update(){
+        if(keyHandler.mute){
+            if(music.isPlaying()){
+                stopMusic();
+            }
+        }else{
+            playMusic(0);
+
+        }
         if(gameState == playState) {
             player.update();
             for(Entity npc : npcs){
@@ -164,7 +172,7 @@ public class GamePanel extends JPanel implements Runnable {
             tileManage.update();
 
         } else if (gameState == pauseState) {
-            
+
         }
 
     }
@@ -222,15 +230,12 @@ public class GamePanel extends JPanel implements Runnable {
         g2.dispose();
     }
     public void playMusic(int i){
-        music.setFile(i);
-        music.play();
-        music.loop();
+        music.playMusic(i);
     }
     public void stopMusic(){
-        music.stop();
+        music.stopMusic();
     }
     public void playSE(int i){
-        se.setFile(i);
-        se.play();
+        se.playSE(i);
     }
 }

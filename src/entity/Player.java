@@ -1,12 +1,13 @@
 package entity;
 
 import main.GamePanel;
-import main.KeyHandler;
+import object.OBJ_Key;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Player extends Entity{
 
@@ -14,6 +15,8 @@ public class Player extends Entity{
     public int worldCol, worldRow, screenCol, screenRow;
     private int tempScreenX, tempScreenY;
     public boolean attackCanceled;
+    public ArrayList<Entity> inventory;
+    public final int maxInventorySize;
 
     public Player(GamePanel gp){
         super(gp);
@@ -43,7 +46,19 @@ public class Player extends Entity{
 
         this.attackCanceled = false;
         setDefaultValues();
+
+        this.inventory = new ArrayList<>();
+        maxInventorySize = 20;
+        setItems();
     }
+    // 设置背包
+    private void setItems() {
+        inventory.add(currentWeapon);
+        inventory.add(currentShield);
+        inventory.add(new OBJ_Key(gp));
+
+    }
+
     // default value
     private void setDefaultValues(){
         this.speed = 4;

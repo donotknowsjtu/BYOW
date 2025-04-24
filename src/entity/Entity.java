@@ -70,6 +70,9 @@ public class Entity {
     public int attackValue;
     public int defenseValue;
 
+    // Description
+    public String description;
+
     public Entity(GamePanel gp){
         this.gp = gp;
         this.spriteCounter = 1;
@@ -91,6 +94,7 @@ public class Entity {
         this.dyingCounter = 0;
         this.hpBarOn = false;
         this.hpBarCounter = 0;
+        this.description = null;
     }
     // 这个方法是npc专用
     public void draw(Graphics2D g2){

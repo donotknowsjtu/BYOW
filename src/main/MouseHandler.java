@@ -12,11 +12,14 @@ public class MouseHandler extends MouseInputAdapter {
     private GamePanel gp;
     private Point mousePoint;
     private BufferedImage image;
+    public int touchedObjNum;
+    public int clickedObjNum;
 
     public MouseHandler(GamePanel gp){
         this.gp = gp;
         this.mousePoint = new Point(0, 0);
         this.image = getMouseImage();
+        touchedObjNum = 0;
     }
     @Override
     public void mousePressed(MouseEvent e) {
@@ -27,32 +30,37 @@ public class MouseHandler extends MouseInputAdapter {
         for (int i = 0; i < gp.ui.toBeClickedObj.size(); i++) {
             if (gp.ui.toBeClickedObj.get(i).obj.contains(mousePoint)) {
 
-                gp.ui.toBeClickedObj.get(i).clicked = true;
-                gp.ui.buttonClicked = true;
-                if (gp.ui.titleScreenState == 0) {
-                    if (gp.ui.commandNum == 0) {
-                        gp.ui.titleScreenState = 1;
-                        gp.playMusic(0);
-                    } else if (gp.ui.commandNum == 1) {
+                clickedObjNum = i;
+                gp.ui.commandNum = i;
+                if(gp.gameState == gp.titleState){titleState();}
 
-                    } else if (gp.ui.commandNum == 2) {
-                        System.exit(0);
-                    }
-                } else if (gp.ui.titleScreenState == 1) {
+            }
+        }
+    }
+
+    private void titleState() {
+        if (gp.ui.titleScreenState == 0) {
+            if (gp.ui.commandNum == 0) {
+                gp.ui.titleScreenState = 1;
+                gp.playMusic(0);
+            } else if (gp.ui.commandNum == 1) {
+
+            } else if (gp.ui.commandNum == 2) {
+                System.exit(0);
+            }
+        } else if (gp.ui.titleScreenState == 1) {
 
 
-                    if (gp.ui.commandNum == 0) {
-                        gp.gameState = gp.playState;
-                    } else if (gp.ui.commandNum == 1) {
-                        gp.gameState = gp.playState;
-                    } else if (gp.ui.commandNum == 2) {
-                        gp.gameState = gp.playState;
-                    } else if (gp.ui.commandNum == 3) {
-                        gp.ui.titleScreenState = 0;
-                        gp.stopMusic();
-                        gp.ui.commandNum = 0;
-                    }
-                }
+            if (gp.ui.commandNum == 0) {
+                gp.gameState = gp.playState;
+            } else if (gp.ui.commandNum == 1) {
+                gp.gameState = gp.playState;
+            } else if (gp.ui.commandNum == 2) {
+                gp.gameState = gp.playState;
+            } else if (gp.ui.commandNum == 3) {
+                gp.ui.titleScreenState = 0;
+                gp.stopMusic();
+                gp.ui.commandNum = 0;
             }
         }
     }
@@ -71,7 +79,12 @@ public class MouseHandler extends MouseInputAdapter {
         for(int i = 0; i < gp.ui.toBeClickedObj.size(); i ++){
             if(gp.ui.toBeClickedObj.get(i).obj.contains(mousePoint)){
 
-                gp.ui.toBeClickedObj.get(i).touched = true;
+
+                if(touchedObjNum != i){
+                    gp.playSE(8);
+                }
+                touchedObjNum = i;
+                gp.ui.commandNum = i;
             }
         }
 

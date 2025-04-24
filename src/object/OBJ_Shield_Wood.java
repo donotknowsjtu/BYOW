@@ -12,5 +12,6 @@ public class OBJ_Shield_Wood extends Entity {
         defenseValue = 1;
         attack = 5;
         defense = 0;
+        description = "[木盾]\n提供额外的防御力，防御倍率\n为1";
     }
 }

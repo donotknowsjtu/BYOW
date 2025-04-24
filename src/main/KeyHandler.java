@@ -14,12 +14,15 @@ public class KeyHandler implements KeyListener {
     public boolean W_pressed, S_pressed, A_pressed, D_pressed, Enter_pressed;
     public boolean debugMode;
     public boolean reloadMap;
+    public boolean mute;
+
     private GamePanel gp;
     public KeyHandler(GamePanel gp){
         this.gp = gp;
         this.Enter_pressed = false;
         this.debugMode = false;
         this.reloadMap = false;
+        this.mute = false;
     }
     @Override
     public void keyTyped(KeyEvent e) {
@@ -29,6 +32,7 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
+        if(code == KeyEvent.VK_M){mute = !mute;}
         if(gp.gameState == gp.titleState){titleState(code);}
         else if(gp.gameState == gp.playState) {playState(code, e);}
         else if (gp.gameState == gp.pauseState) {pauseState(code);}

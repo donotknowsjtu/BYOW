@@ -11,5 +11,6 @@ public class OBJ_Sword_Normal extends Entity {
         name = "Normal Sword";
         down1 = setup("/objects/sword_normal.png", gp.tileSize, gp.tileSize);
         attackValue = 1;
+        description = "[普通长剑]\n提供额外的攻击力，攻击倍率\n为1";
     }
 }
