@@ -7,11 +7,12 @@ import main.GamePanel;
 public class OBJ_Door extends Entity {
 
     public OBJ_Door(GamePanel gp){
-
         super(gp);
-        this.name = "Door";
+        this.type = objectType;
 
-        up1 = setup("/objects/door.png", gp.tileSize, gp.tileSize);
+        this.name = "Door";
+        down1 = setup("/objects/door.png", gp.tileSize, gp.tileSize);
+        image = down1;
         collisionOn = true;
 
         solidArea.x = 0;

@@ -59,12 +59,16 @@ public class Entity {
     public BufferedImage image1, image2, image3;
     public String name;
     public boolean collisionOn;
+        // 能否被使用
+    public boolean toUse;
+    public boolean disappear;
 
     // type用来区分player = 0， npc = 1， monster = 2
     public int type;
-    public final int playerType = 0;
-    public final int npcType = 1;
-    public final int monsterType = 2;
+    public static int playerType = 0;
+    public static int npcType = 1;
+    public static int monsterType = 2;
+    public static final int objectType = 3;
 
     // Item attributes
     public int attackValue;
@@ -95,71 +99,77 @@ public class Entity {
         this.hpBarOn = false;
         this.hpBarCounter = 0;
         this.description = null;
+        this.toUse = false;
     }
-    // 这个方法是npc专用
-    public void draw(Graphics2D g2){
+    // 这个方法不供player使用
+    public void draw(Graphics2D g2, int type){
         int screenX = this.worldX - gp.player.worldX + gp.player.screenX;
         int screenY = this.worldY - gp.player.worldY + gp.player.screenY;
+        // monster 和 npc 获取图像
+        if(type == monsterType || type == npcType){
+           if(direction == Direction.UP && spriteCounter == 1){
+               image = up1;
+           }else if(direction == Direction.UP && spriteCounter == 2){
+               image = up2;
+           }else if(direction == Direction.UP && spriteCounter == 3){
+               image = up3;
+           }else if(direction == Direction.UP && spriteCounter == 4){
+               image = up4;
+           }else if(direction == Direction.DOWN && spriteCounter == 1){
+               image = down1;
+           }else if(direction == Direction.DOWN && spriteCounter == 2){
+               image = down2;
+           }else if(direction == Direction.DOWN && spriteCounter == 3){
+               image = down3;
+           }else if(direction == Direction.DOWN && spriteCounter == 4){
+               image = down4;
+           } else if(direction == Direction.LEFT && spriteCounter == 1){
+               image = left1;
+           }else if(direction == Direction.LEFT && spriteCounter == 2){
+               image = left3;
+           }else if(direction == Direction.LEFT && spriteCounter == 3){
+               image = left3;
+           }else if(direction == Direction.LEFT && spriteCounter == 4){
+               image = left4;
+           }else if(direction == Direction.RIGHT && spriteCounter == 1){
+               image = right1;
+           }else if(direction == Direction.RIGHT && spriteCounter == 2){
+               image = right3;
+           }else if(direction == Direction.RIGHT && spriteCounter == 3){
+               image = right3;
+           }else if(direction == Direction.RIGHT && spriteCounter == 4){
+               image = right4;
+           }
+       }
 
-        if(direction == Direction.UP && spriteCounter == 1){
-            image = up1;
-        }else if(direction == Direction.UP && spriteCounter == 2){
-            image = up2;
-        }else if(direction == Direction.UP && spriteCounter == 3){
-            image = up3;
-        }else if(direction == Direction.UP && spriteCounter == 4){
-            image = up4;
-        }else if(direction == Direction.DOWN && spriteCounter == 1){
-            image = down1;
-        }else if(direction == Direction.DOWN && spriteCounter == 2){
-            image = down2;
-        }else if(direction == Direction.DOWN && spriteCounter == 3){
-            image = down3;
-        }else if(direction == Direction.DOWN && spriteCounter == 4){
-            image = down4;
-        } else if(direction == Direction.LEFT && spriteCounter == 1){
-            image = left1;
-        }else if(direction == Direction.LEFT && spriteCounter == 2){
-            image = left3;
-        }else if(direction == Direction.LEFT && spriteCounter == 3){
-            image = left3;
-        }else if(direction == Direction.LEFT && spriteCounter == 4){
-            image = left4;
-        }else if(direction == Direction.RIGHT && spriteCounter == 1){
-            image = right1;
-        }else if(direction == Direction.RIGHT && spriteCounter == 2){
-            image = right3;
-        }else if(direction == Direction.RIGHT && spriteCounter == 3){
-            image = right3;
-        }else if(direction == Direction.RIGHT && spriteCounter == 4){
-            image = right4;
-        }
+        // Monster 伤害和血量处理
+        if(type == monsterType ) {
+            if(hpBarOn) {
+                double oneScale = (double) gp.tileSize / maxLife;
+                double hpBarValue = oneScale * life;
 
-        // Monster HP bar
-        if(type == 2 && hpBarOn) {
-            double oneScale = (double) gp.tileSize / maxLife;
-            double hpBarValue = oneScale * life;
+                g2.setColor(new Color(35, 35, 35));
+                g2.fillRect(screenX - 1, screenY - 16, gp.tileSize + 2, 12);
+                g2.setColor(new Color(255, 0, 30));
+                g2.fillRect(screenX, screenY - 15, (int) hpBarValue, 10);
 
-            g2.setColor(new Color(35, 35, 35));
-            g2.fillRect(screenX - 1, screenY - 16,gp.tileSize + 2, 12);
-            g2.setColor(new Color(255, 0, 30));
-            g2.fillRect(screenX, screenY - 15, (int) hpBarValue, 10);
+                hpBarCounter++;
+                if (hpBarCounter >= 600) {
+                    hpBarCounter = 0;
+                    hpBarOn = false;
+                }
+            }
+            // 被攻击，画笔改为半透明
+            if(invincible){
+                hpBarOn = true;
+                changeAlpha(g2, 0.3f);
+            }
 
-            hpBarCounter ++;
-            if(hpBarCounter >= 600){
-                hpBarCounter = 0;
-                hpBarOn = false;
+            if(dying){
+                dyingAnimation(g2);
             }
         }
-        // 被攻击，画笔改为半透明
-        if(invincible){
-            hpBarOn = true;
-            changeAlpha(g2, 0.3f);
-        }
 
-        if(dying){
-            dyingAnimation(g2);
-        }
 
         if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
                 worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
@@ -330,7 +340,7 @@ public class Entity {
             case Direction.RIGHT: direction = Direction.LEFT;break;
         }
     }
-    public void damageReaction(){
-
-    }
+    public void damageReaction(){}
+    // object对象的use方法
+    public void use(){}
 }

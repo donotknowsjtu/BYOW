@@ -1,6 +1,7 @@
 package entity;
 
 import main.GamePanel;
+import object.OBJ_Axe;
 import object.OBJ_Key;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
@@ -17,9 +18,13 @@ public class Player extends Entity{
     public boolean attackCanceled;
     public ArrayList<Entity> inventory;
     public final int maxInventorySize;
+    private BufferedImage swordUp1, swordUp2, swordDown1, swordDown2, swordLeft1, swordLeft2, swordRight1, swordRight2,
+            axeUp1, axeUp2, axeDown1, axeDown2, axeLeft1, axeLeft2, axeRight1, axeRight2;
+    public boolean weaponChanged;
 
     public Player(GamePanel gp){
         super(gp);
+        this.type = playerType;
 
         this.screenX = (gp.screenLength - gp.tileSize) / 2;
         this.screenY = (gp.screenWidth - gp.tileSize) / 2;
@@ -34,9 +39,6 @@ public class Player extends Entity{
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
 
-        this.attackArea.width = 36;
-        this.attackArea.height = 36;
-
         loadImage();
         loadPlayerAttackImage();
         this.image = getImage();
@@ -50,7 +52,10 @@ public class Player extends Entity{
         this.inventory = new ArrayList<>();
         maxInventorySize = 20;
         setItems();
+
+        this.weaponChanged = true;
     }
+
     // 设置背包
     private void setItems() {
         inventory.add(currentWeapon);
@@ -80,12 +85,16 @@ public class Player extends Entity{
         defense = getDefense();
 
     }
+
     private int getAttack(){
+        attackArea = currentWeapon.attackArea;
         return attack = strength * currentWeapon.attackValue;
     }
+
     private int getDefense(){
         return defense = dexterity * currentShield.defenseValue;
     }
+
     private void loadImage(){
         up1 = setup("/player/_up1.png", gp.tileSize, gp.tileSize);
         up2 = setup("/player/_up2.png", gp.tileSize, gp.tileSize);
@@ -104,15 +113,26 @@ public class Player extends Entity{
         right3 = setup("/player/_right3.png", gp.tileSize, gp.tileSize);
         right4 = setup("/player/_right4.png", gp.tileSize, gp.tileSize);
     }
+
     private void loadPlayerAttackImage(){
-        attackUp1 = setup("/player/attacking/boy_attack_up_1.png", gp.tileSize, gp.tileSize*2);
-        attackUp2 = setup("/player/attacking/boy_attack_up_2.png", gp.tileSize, gp.tileSize*2);
-        attackDown1 = setup("/player/attacking/boy_attack_down_1.png", gp.tileSize, gp.tileSize*2);
-        attackDown2 = setup("/player/attacking/boy_attack_down_2.png", gp.tileSize, gp.tileSize*2);
-        attackLeft1 = setup("/player/attacking/boy_attack_left_1.png", gp.tileSize * 2, gp.tileSize);
-        attackLeft2 = setup("/player/attacking/boy_attack_left_2.png", gp.tileSize * 2, gp.tileSize);
-        attackRight1 = setup("/player/attacking/boy_attack_right_1.png", gp.tileSize * 2, gp.tileSize);
-        attackRight2 = setup("/player/attacking/boy_attack_right_2.png", gp.tileSize * 2, gp.tileSize);
+        // sword
+        swordUp1 = setup("/player/attacking/boy_attack_up_1.png", gp.tileSize, gp.tileSize * 2);
+        swordUp2 = setup("/player/attacking/boy_attack_up_2.png", gp.tileSize, gp.tileSize * 2);
+        swordDown1 = setup("/player/attacking/boy_attack_down_1.png", gp.tileSize, gp.tileSize * 2);
+        swordDown2 = setup("/player/attacking/boy_attack_down_2.png", gp.tileSize, gp.tileSize * 2);
+        swordLeft1 = setup("/player/attacking/boy_attack_left_1.png", gp.tileSize * 2, gp.tileSize);
+        swordLeft2 = setup("/player/attacking/boy_attack_left_2.png", gp.tileSize * 2, gp.tileSize);
+        swordRight1 = setup("/player/attacking/boy_attack_right_1.png", gp.tileSize * 2, gp.tileSize);
+        swordRight2 = setup("/player/attacking/boy_attack_right_2.png", gp.tileSize * 2, gp.tileSize);
+        // axe
+        axeUp1 = setup("/player/attacking/boy_axe_up_1.png", gp.tileSize, gp.tileSize * 2);
+        axeUp2 = setup("/player/attacking/boy_axe_up_2.png", gp.tileSize, gp.tileSize * 2);
+        axeDown1 = setup("/player/attacking/boy_axe_down_1.png", gp.tileSize, gp.tileSize * 2);
+        axeDown2 = setup("/player/attacking/boy_axe_down_2.png", gp.tileSize, gp.tileSize * 2);
+        axeLeft1 = setup("/player/attacking/boy_axe_left_1.png", gp.tileSize * 2, gp.tileSize);
+        axeLeft2 = setup("/player/attacking/boy_axe_left_2.png", gp.tileSize * 2, gp.tileSize);
+        axeRight1 = setup("/player/attacking/boy_axe_right_1.png", gp.tileSize * 2, gp.tileSize);
+        axeRight2 = setup("/player/attacking/boy_axe_right_2.png", gp.tileSize * 2, gp.tileSize);
 
     }
 
@@ -158,8 +178,7 @@ public class Player extends Entity{
             gp.cChecker.checkTile(this);
             // 检测物品碰撞
             int objIndex = gp.cChecker.checkObject(this, true);
-            pickUpObject(objIndex);
-
+            if(gp.keyHandler.E_pressed) {pickUpObject(objIndex);}
             // 检查npc碰撞
             int npcIndex = gp.cChecker.checkEntity(this, gp.npcs);
             interactNpc(npcIndex);
@@ -293,12 +312,45 @@ public class Player extends Entity{
 
     public void pickUpObject(int objIndex){
         if(objIndex != 999){
-
+            String text;
+            if(inventory.size() < maxInventorySize){
+                inventory.add(gp.objects[objIndex]);
+                gp.playSE(1);
+                text = gp.objects[objIndex].name + "+1";
+                gp.objects[objIndex] = null;
+                gp.ui.addMessage(text);
+            }else {
+                text = "the bag is full!";
+                gp.ui.addMessage(text);
+            }
         }
 
     }
+
     @Override
     public BufferedImage getImage(){
+        if(weaponChanged){
+            if(currentWeapon.getClass() == OBJ_Sword_Normal.class){
+                attackUp1 = swordUp1;
+                attackUp2 = swordUp2;
+                attackDown1 = swordDown1;
+                attackDown2 = swordDown2;
+                attackLeft1 = swordLeft1;
+                attackLeft2 = swordLeft2;
+                attackRight1 = swordRight1;
+                attackRight2 = swordRight2;
+            } else if (currentWeapon.getClass() == OBJ_Axe.class) {
+                attackUp1 = axeUp1;
+                attackUp2 = axeUp2;
+                attackDown1 = axeDown1;
+                attackDown2 = axeDown2;
+                attackLeft1 = axeLeft1;
+                attackLeft2 = axeLeft2;
+                attackRight1 = axeRight1;
+                attackRight2 = axeRight2;
+            }
+            weaponChanged = false;
+        }
         switch(direction){
             case Direction.UP:
                 if(!attacking){
@@ -349,8 +401,9 @@ public class Player extends Entity{
         }
         return image;
     }
+
     @Override
-    public void draw(Graphics2D g2){
+    public void draw(Graphics2D g2, int type){
 
 
         if(invincible){
@@ -363,4 +416,17 @@ public class Player extends Entity{
 
     }
 
+    public void selectObject(int objNum){
+        Entity selectObject = inventory.get(objNum);
+        // weapon
+        if(selectObject.getClass() == OBJ_Sword_Normal.class || selectObject.getClass() == OBJ_Axe.class){
+            currentWeapon = selectObject;
+            weaponChanged = true;
+        }
+        // shield
+        else if (selectObject.getClass() == OBJ_Shield_Wood.class) {
+            currentShield = selectObject;
+        }
+        // others
+    }
 }

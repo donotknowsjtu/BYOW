@@ -3,7 +3,9 @@ package main;
 
 
 
+import entity.Entity;
 import net.sf.saxon.trans.SymbolicName;
+import org.checkerframework.checker.units.qual.K;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -12,6 +14,7 @@ import static java.awt.event.KeyEvent.VK_C;
 
 public class KeyHandler implements KeyListener {
     public boolean W_pressed, S_pressed, A_pressed, D_pressed, Enter_pressed;
+    public boolean E_pressed;
     public boolean debugMode;
     public boolean reloadMap;
     public boolean mute;
@@ -22,7 +25,8 @@ public class KeyHandler implements KeyListener {
         this.Enter_pressed = false;
         this.debugMode = false;
         this.reloadMap = false;
-        this.mute = false;
+        this.mute = true;
+        this.E_pressed = false;
     }
     @Override
     public void keyTyped(KeyEvent e) {
@@ -124,9 +128,22 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_CAPS_LOCK){
             gp.ui.showInventoryUI = !gp.ui.showInventoryUI;
-
         }
-
+        if(code == KeyEvent.VK_E){
+            if(gp.ui.showInventoryUI) {inventoryUI();}
+            E_pressed = true;
+        }
+    }
+    private void inventoryUI(){
+        if(gp.mouseHandler.touchedObjNum < gp.player.inventory.size()) {
+            gp.player.selectObject(gp.mouseHandler.touchedObjNum);
+            if (gp.player.inventory.get(gp.mouseHandler.touchedObjNum).type == Entity.objectType && gp.player.inventory.get(gp.mouseHandler.touchedObjNum).toUse) {
+                gp.player.inventory.get(gp.mouseHandler.touchedObjNum).use();
+                if (gp.player.inventory.get(gp.mouseHandler.touchedObjNum).disappear) {
+                    gp.player.inventory.remove(gp.mouseHandler.touchedObjNum);
+                }
+            }
+        }
     }
     private void pauseState(int code){
         if(code == KeyEvent.VK_P){
@@ -163,6 +180,9 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_SLASH){
             reloadMap = false;
+        }
+        if(code == KeyEvent.VK_E){
+            E_pressed = false;
         }
     }
 }

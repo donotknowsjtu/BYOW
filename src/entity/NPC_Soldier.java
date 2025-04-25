@@ -10,6 +10,8 @@ public class NPC_Soldier extends Entity{
 
     public NPC_Soldier(GamePanel gp){
         super(gp);
+        this.type = npcType;
+
         this.speed = 1;
         this.direction = Direction.UP;
         this.spriteCounter = 1;

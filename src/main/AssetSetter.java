@@ -2,10 +2,7 @@ package main;
 
 import entity.NPC_Soldier;
 import monster.MON_GreenSlime;
-import object.OBJ_Boots;
-import object.OBJ_Chest;
-import object.OBJ_Door;
-import object.OBJ_Key;
+import object.*;
 
 public class AssetSetter {
 
@@ -19,13 +16,34 @@ public class AssetSetter {
 
 
     public void setObject(){
-        gp.objects[0] = new OBJ_Door(gp);
-        gp.objects[0].worldX = gp.tileSize * 21;
-        gp.objects[0].worldY = gp.tileSize * 22;
-
-        gp.objects[1] = new OBJ_Door(gp);
-        gp.objects[1].worldX = gp.tileSize * 23;
-        gp.objects[1].worldY = gp.tileSize * 25;
+        int i = 0;
+        gp.objects[i] = new OBJ_Door(gp);
+        gp.objects[i].worldX = gp.tileSize * 21;
+        gp.objects[i].worldY = gp.tileSize * 22;
+        i ++;
+        gp.objects[i] = new OBJ_Door(gp);
+        gp.objects[i].worldX = gp.tileSize * 23;
+        gp.objects[i].worldY = gp.tileSize * 25;
+        i ++;
+        gp.objects[i] = new OBJ_Key(gp);
+        gp.objects[i].worldX = gp.tileSize * 19;
+        gp.objects[i].worldY = gp.tileSize * 22;
+        i ++;
+        gp.objects[i] = new OBJ_Key(gp);
+        gp.objects[i].worldX = gp.tileSize * 19;
+        gp.objects[i].worldY = gp.tileSize * 23;
+        i ++;
+        gp.objects[i] = new OBJ_Key(gp);
+        gp.objects[i].worldX = gp.tileSize * 19;
+        gp.objects[i].worldY = gp.tileSize * 24;
+        i ++;
+        gp.objects[i] = new OBJ_Axe(gp);
+        gp.objects[i].worldX = gp.tileSize * 18;
+        gp.objects[i].worldY = gp.tileSize * 24;
+        i ++;
+        gp.objects[i] = new OBJ_Potion(gp, 2);
+        gp.objects[i].worldX = gp.tileSize * 17;
+        gp.objects[i].worldY = gp.tileSize * 24;
     }
 
     public void setNPC(){

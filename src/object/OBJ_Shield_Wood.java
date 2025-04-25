@@ -6,9 +6,13 @@ import main.GamePanel;
 public class OBJ_Shield_Wood extends Entity {
     public OBJ_Shield_Wood(GamePanel gp) {
         super(gp);
+        this.type = objectType;
+        toUse = true;
+        disappear = false;
 
         name = "Wood Shield";
         down1 = setup("/objects/shield_wood.png", gp.tileSize, gp.tileSize);
+        image = down1;
         defenseValue = 1;
         attack = 5;
         defense = 0;

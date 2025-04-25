@@ -215,7 +215,7 @@ public class GamePanel extends JPanel implements Runnable {
             });
             // 绘制Entity
             for(int i = 0; i < entityList.size(); i ++){
-                entityList.get(i).draw(g2);
+                entityList.get(i).draw(g2, entityList.get(i).type);
             }
             // 移除entity，下次绘制时重新添加
             entityList.clear();

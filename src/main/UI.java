@@ -61,10 +61,6 @@ public class UI {
 
 
     }
-    public void addMessage(String text){
-      message.add(text);
-      messageCounter.add(0);
-    }
 
     public void draw(Graphics2D g2){
         this.g2 = g2;
@@ -95,6 +91,7 @@ public class UI {
         }
     }
 
+    // Inventory
     private void drawInventoryScreen() {
         int frameX = gp.screenLength - gp.tileSize * 5 - 90;
         int frameY = gp.tileSize;
@@ -122,23 +119,40 @@ public class UI {
 
         // 绘制背包物品图片
         for(int i = 0; i < gp.player.inventory.size(); i ++){
+            // 对于装备上的武器和盾牌采用不同颜色的画笔绘制
+            if(gp.player.inventory.get(i) == gp.player.currentWeapon || gp.player.inventory.get(i) == gp.player.currentShield){
+                g2.setColor(new Color(240, 190, 90));
+                g2.fillRoundRect(slotX + 3 / 2, slotY + 3 / 2, gp.tileSize + 7 / 2 , gp.tileSize + 7 /2 , 10, 10);
+            }
             g2.drawImage(gp.player.inventory.get(i).down1, slotX, slotY, null);
             slotX += gp.tileSize + 5;
             if(i == 4 || i == 9 || i == 14){
                 slotX = slotXstart;
-                slotY += gp.tileSize;
+                slotY += gp.tileSize + 5;
             }
         }
+        // 绘制强调图层
+        if(gp.mouseHandler.touchedObjNum < 20) {
+            int row = gp.mouseHandler.touchedObjNum / 5; // 行数
+            int col = gp.mouseHandler.touchedObjNum % 5; // 列数
 
-        int row = gp.mouseHandler.touchedObjNum / 5; // 行数
-        int col = gp.mouseHandler.touchedObjNum % 5; // 列数
-        // 绘制强调的圆角矩形背景
-        int highlightX = slotXstart + (gp.tileSize + 5) * col;
-        int highlightY = slotYstart + (gp.tileSize + 5) * row;
-        g2.setColor(new Color(255, 255, 255, 100)); // 设置透明度
-        g2.fillRoundRect(highlightX, highlightY, gp.tileSize + 5, gp.tileSize + 5, 10, 10);
+            int highlightX = slotXstart + (gp.tileSize + 5) * col;
+            int highlightY = slotYstart + (gp.tileSize + 5) * row;
+            g2.setColor(new Color(255, 255, 255, 100)); // 设置透明度
+            g2.fillRoundRect(highlightX, highlightY, gp.tileSize + 5, gp.tileSize + 5, 10, 10);
+        }
 
         // 描述页面
+        drawInventoryScreenDescriptionMessage(frameX, frameY, frameWidth, frameHeight);
+        // 绘制use按钮
+        if(gp.mouseHandler.touchedObjNum < gp.player.inventory.size()) {
+            if (gp.player.inventory.get(gp.mouseHandler.touchedObjNum).toUse) {
+                drawTextWithRoundedRect("按E使用", frameX + frameWidth - gp.tileSize * 5 / 2 + 20, frameY + frameHeight + gp.tileSize * 5 / 2, 10, false);
+            }
+        }
+    }
+
+    private void drawInventoryScreenDescriptionMessage(int frameX, int frameY, int frameWidth, int frameHeight){
         int dFrameX = frameX;
         int dFrameY = frameY + frameHeight;
         int dFrameWidth = frameWidth;
@@ -159,47 +173,11 @@ public class UI {
             }
         }
     }
-
-
-
     private void drawCursorRect(int slotXstart, int slotYstart, int slotCol, int slotRow){
         g2.drawRoundRect(slotXstart + (gp.tileSize + 5) * slotCol, slotYstart + (gp.tileSize + 5) * slotRow, gp.tileSize + 5, gp.tileSize + 5, 10, 10);
     }
 
-    private void drawDebugScreen() {
-        int messageX = gp.screenLength - gp.tileSize * 5;
-        int messageY = gp.tileSize * 4;
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
-        g2.setColor(Color.white);
-        int worldCol = gp.player.worldCol + 1;
-        int worldRow = gp.player.worldRow + 1;
-        g2.drawString("worldCol: " + worldCol , messageX, messageY);
-        messageY += 40;
-        g2.drawString("worldRow: " + worldRow, messageX, messageY);
-    }
-
-    private void drawMessage() {
-        int messageX = gp.tileSize;
-        int messageY = gp.tileSize * 4;
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
-        for(int i = 0; i < message.size(); i ++){
-            if(message.get(i) != null){
-                g2.setColor(Color.BLACK);
-                g2.drawString(message.get(i), messageX + 2, messageY + 2);
-                g2.setColor(Color.white);
-                g2.drawString(message.get(i), messageX, messageY);
-
-                int counter = messageCounter.get(i) + 1;
-                messageCounter.set(i, counter);
-                messageY += 30;
-                if(messageCounter.get(i) > 180){
-                    message.remove(i);
-                    messageCounter.remove(i);
-                }
-            }
-        }
-    }
-
+    // Character
     public void drawCharacterScreen() {
         final int frameX = gp.tileSize ;
         final int frameY = gp.tileSize;
@@ -289,6 +267,41 @@ public class UI {
         g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize, textY, null);
     }
 
+    // Debug
+    private void drawDebugScreen() {
+        int messageX = gp.screenLength - gp.tileSize * 5;
+        int messageY = gp.tileSize * 4;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
+        g2.setColor(Color.white);
+        int worldCol = gp.player.worldCol + 1;
+        int worldRow = gp.player.worldRow + 1;
+        g2.drawString("worldCol: " + worldCol , messageX, messageY);
+        messageY += 40;
+        g2.drawString("worldRow: " + worldRow, messageX, messageY);
+    }
+
+    private void drawMessage() {
+        int messageX = gp.tileSize;
+        int messageY = gp.tileSize * 4;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
+        for(int i = 0; i < message.size(); i ++){
+            if(message.get(i) != null){
+                g2.setColor(Color.BLACK);
+                g2.drawString(message.get(i), messageX + 2, messageY + 2);
+                g2.setColor(Color.white);
+                g2.drawString(message.get(i), messageX, messageY);
+
+                int counter = messageCounter.get(i) + 1;
+                messageCounter.set(i, counter);
+                messageY += 30;
+                if(messageCounter.get(i) > 180){
+                    message.remove(i);
+                    messageCounter.remove(i);
+                }
+            }
+        }
+    }
+
     private void drawPlayerLife() {
 
         int x = gp.tileSize / 2;
@@ -340,21 +353,21 @@ public class UI {
             text = "NEW GAME";
             x = getXforCenterdText(text);
             y += gp.tileSize * 7/2;
-            drawTextWithRoundedRect(text, x, y, 20);
+            drawTextWithRoundedRect(text, x, y, 20, true);
             if (commandNum == 0) {
                 g2.drawString(">", x - gp.tileSize, y);
             }
             text = "LOAD GAME";
             x = getXforCenterdText(text);
             y += gp.tileSize * 2;
-            drawTextWithRoundedRect(text, x, y, 20);
+            drawTextWithRoundedRect(text, x, y, 20, true);
             if (commandNum == 1) {
                 g2.drawString(">", x - gp.tileSize, y);
             }
             text = "QUIT";
             x = getXforCenterdText(text);
             y += gp.tileSize * 2;
-            drawTextWithRoundedRect(text, x, y, 20);
+            drawTextWithRoundedRect(text, x, y, 20, true);
             if (commandNum == 2) {
                 g2.drawString(">", x - gp.tileSize, y);
             }
@@ -375,14 +388,14 @@ public class UI {
             text = "Fighter";
             x = getXforCenterdText(text);
             y += gp.tileSize * 3 / 2;
-            drawTextWithRoundedRect(text, x, y, 20);
+            drawTextWithRoundedRect(text, x, y, 20, true);
             if(commandNum == 0){
                 g2.drawString(">", x - gp.tileSize, y);
             }
             text = "Thief";
             x = getXforCenterdText(text);
             y += gp.tileSize * 3 / 2;
-            drawTextWithRoundedRect(text, x, y, 20);
+            drawTextWithRoundedRect(text, x, y, 20, true);
 
             if(commandNum == 1 ){
                 g2.drawString(">", x - gp.tileSize, y);
@@ -390,7 +403,7 @@ public class UI {
             text = "Sorcerer";
             x = getXforCenterdText(text);
             y += gp.tileSize * 3 / 2;
-            drawTextWithRoundedRect(text, x, y, 20);
+            drawTextWithRoundedRect(text, x, y, 20, true);
 
             if(commandNum == 2){
                 g2.drawString(">", x - gp.tileSize, y);
@@ -399,7 +412,7 @@ public class UI {
             text = "back";
             x = getXforCenterdText(text);
             y += gp.tileSize * 3 / 2;
-            drawTextWithRoundedRect(text, x, y, 20);
+            drawTextWithRoundedRect(text, x, y, 20, true);
 
             if(commandNum == 3){
                 g2.drawString(">", x - gp.tileSize, y);
@@ -452,7 +465,7 @@ public class UI {
         return tailX - length;
     }
 
-    private void drawTextWithRoundedRect(String text, int x, int y, int paddingX) {
+    private void drawTextWithRoundedRect(String text, int x, int y, int paddingX, boolean add) {
         // Calculate text dimensions
         int textWidth = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         int textHeight = (int) g2.getFontMetrics().getStringBounds(text, g2).getHeight();
@@ -472,12 +485,17 @@ public class UI {
 
         // Draw text
         g2.drawString(text, x, y);
-
-        // Create and add ClickObj // 可优化
-        ClickObj clickObj = new ClickObj(rectX, rectY, rectWidth, rectHeight);
-        toBeClickedObj.add(clickObj);
+        if (add) {
+            // Create and add ClickObj // 可优化
+            ClickObj clickObj = new ClickObj(rectX, rectY, rectWidth, rectHeight);
+            toBeClickedObj.add(clickObj);
+        }
     }
 
+    public void addMessage(String text){
+        message.add(text);
+        messageCounter.add(0);
+    }
 
 
 

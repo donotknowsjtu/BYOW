@@ -7,10 +7,11 @@ import entity.Player;
 public class CollisionChecker {
 
     public GamePanel gp;
+    private int pickUpCounter;
 
     public CollisionChecker(GamePanel gp) {
         this.gp = gp;
-
+        this.pickUpCounter = 0;
 
     }
 
@@ -80,6 +81,11 @@ public class CollisionChecker {
                     }
                     if (isPlayer) {
                         index = i;
+                    }
+                    pickUpCounter++;
+                    if (pickUpCounter == 120) {
+                        gp.ui.addMessage("按E拾取");
+                        pickUpCounter = 0;
                     }
                 }
                 entity.solidArea.x = entity.solidAreaDefaultX;
